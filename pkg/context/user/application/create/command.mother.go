@@ -1,7 +1,7 @@
 package create
 
 import (
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/dsgo/pkg/context/user/domain/valueobj"
 )
 
 func RandomCommand() *Command {

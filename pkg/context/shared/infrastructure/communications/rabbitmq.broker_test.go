@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/communications"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/loggers"
 	"github.com/stretchr/testify/suite"
 )
 

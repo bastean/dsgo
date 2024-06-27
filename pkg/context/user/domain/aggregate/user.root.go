@@ -1,11 +1,11 @@
 package aggregate
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/aggregates"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/user/domain/event"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/aggregates"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/models"
+	"github.com/bastean/dsgo/pkg/context/user/domain/event"
+	"github.com/bastean/dsgo/pkg/context/user/domain/valueobj"
 )
 
 type User struct {

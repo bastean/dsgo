@@ -3,14 +3,14 @@ package service
 import (
 	"context"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/communication"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/communication/rabbitmq"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/env"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/errors"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/persistence/mongodb"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/transport/smtp"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/communication"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/communication/rabbitmq"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/env"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/errors"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/logger"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/persistence/mongodb"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/transport/smtp"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/user"
 )
 
 var (
@@ -41,7 +41,7 @@ func startRabbitMQ() error {
 	RabbitMQ, err = rabbitmq.New(
 		env.Broker.URI,
 		logger.Logger,
-		rabbitmq.Exchange("codexgo"),
+		rabbitmq.Exchange("dsgo"),
 		rabbitmq.Queues{
 			user.QueueSendConfirmation,
 		},
@@ -60,7 +60,7 @@ func startRabbitMQ() error {
 func startMongoDB() error {
 	MongoDB, err = mongodb.New(
 		env.Database.URI,
-		"codexgo",
+		"dsgo",
 	)
 
 	if err != nil {

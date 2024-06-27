@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/errors"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/errors"
 )
 
 func BindingJSON(who error, where string) error {

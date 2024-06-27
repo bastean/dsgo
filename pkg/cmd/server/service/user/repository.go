@@ -1,10 +1,10 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/persistences"
+	"github.com/bastean/dsgo/pkg/context/user/domain/model"
+	"github.com/bastean/dsgo/pkg/context/user/infrastructure/persistence"
 )
 
 func MongoCollection(database *persistences.MongoDB, name string, hashing model.Hashing) (model.Repository, error) {

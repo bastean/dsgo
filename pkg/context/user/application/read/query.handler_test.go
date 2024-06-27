@@ -3,11 +3,11 @@ package read_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/user/application/read"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/models"
+	"github.com/bastean/dsgo/pkg/context/user/application/read"
+	"github.com/bastean/dsgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/dsgo/pkg/context/user/domain/model"
+	"github.com/bastean/dsgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 

@@ -3,8 +3,8 @@ package mongodb
 import (
 	"context"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/persistences"
 )
 
 type MongoDB = *persistences.MongoDB

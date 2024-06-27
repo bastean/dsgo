@@ -1,7 +1,7 @@
 package page
 
 import (
-	"github.com/bastean/codexgo/pkg/cmd/server/component/page/home"
+	"github.com/bastean/dsgo/pkg/cmd/server/component/page/home"
 	"github.com/gin-gonic/gin"
 )
 

@@ -3,7 +3,7 @@ package middleware
 import (
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/env"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/env"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-gonic/gin"
 )

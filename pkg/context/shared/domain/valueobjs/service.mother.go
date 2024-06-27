@@ -1,9 +1,9 @@
 package valueobjs
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/models"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/services"
 )
 
 func ServiceWithValidValue() models.ValueObject[string] {

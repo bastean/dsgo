@@ -1,7 +1,7 @@
 package cryptographic
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 

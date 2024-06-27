@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/bastean/codexgo/pkg/cmd/server/service/env"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/env"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"

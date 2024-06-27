@@ -3,8 +3,8 @@ package event
 import (
 	"encoding/json"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/messages"
 )
 
 var CreatedSucceededTypeRoutingKey = messages.NewRoutingKey(&messages.RoutingKeyComponents{

@@ -1,10 +1,10 @@
 package layout
 
 import (
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script/fomantic"
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script/storage"
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script/jquery"
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script"
+	"github.com/bastean/dsgo/pkg/cmd/server/component/script/fomantic"
+	"github.com/bastean/dsgo/pkg/cmd/server/component/script/storage"
+	"github.com/bastean/dsgo/pkg/cmd/server/component/script/jquery"
+	"github.com/bastean/dsgo/pkg/cmd/server/component/script"
 )
 
 templ Index(headScripts script.Head, bodyScripts script.Body) {
@@ -14,8 +14,8 @@ templ Index(headScripts script.Head, bodyScripts script.Body) {
 			<!-- Meta -->
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<meta name="description" content="codexgo"/>
-			<meta name="keywords" content="codexgo"/>
+			<meta name="description" content="dsgo"/>
+			<meta name="keywords" content="dsgo"/>
 			<meta name="theme-color" content="#202224"/>
 			<meta name="apple-mobile-web-app-capable" content="yes"/>
 			<meta
@@ -28,7 +28,7 @@ templ Index(headScripts script.Head, bodyScripts script.Body) {
 				content="noindex, nofollow, noarchive, nositelinkssearchbox, nosnippet, notranslate, noimageindex"
 			/>
 			<!-- Properties -->
-			<title>codexGO</title>
+			<title>dsGO</title>
 			<link rel="manifest" href="/public/static/manifest.json"/>
 			<link
 				rel="apple-touch-icon"
@@ -48,7 +48,7 @@ templ Index(headScripts script.Head, bodyScripts script.Body) {
 			<!-- Lodash -->
 			<script src="/public/static/dist/lodash.com/lodash.min.js"></script>
 			<!-- Scripts -->
-			<!-- codexGO -->
+			<!-- dsGO -->
 			@storage.Init()
 			<!-- jQuery -->
 			@jquery.Init()

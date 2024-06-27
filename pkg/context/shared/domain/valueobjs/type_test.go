@@ -3,8 +3,8 @@ package valueobjs_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/valueobjs"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/valueobjs"
 	"github.com/stretchr/testify/suite"
 )
 

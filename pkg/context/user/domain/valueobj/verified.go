@@ -3,8 +3,8 @@ package valueobj
 import (
 	"fmt"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/models"
 )
 
 type Verified struct {

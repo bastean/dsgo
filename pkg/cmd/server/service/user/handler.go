@@ -1,14 +1,14 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/user/application/create"
-	"github.com/bastean/codexgo/pkg/context/user/application/delete"
-	"github.com/bastean/codexgo/pkg/context/user/application/login"
-	"github.com/bastean/codexgo/pkg/context/user/application/read"
-	"github.com/bastean/codexgo/pkg/context/user/application/update"
-	"github.com/bastean/codexgo/pkg/context/user/application/verify"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/dsgo/pkg/context/user/application/create"
+	"github.com/bastean/dsgo/pkg/context/user/application/delete"
+	"github.com/bastean/dsgo/pkg/context/user/application/login"
+	"github.com/bastean/dsgo/pkg/context/user/application/read"
+	"github.com/bastean/dsgo/pkg/context/user/application/update"
+	"github.com/bastean/dsgo/pkg/context/user/application/verify"
+	"github.com/bastean/dsgo/pkg/context/user/domain/model"
 )
 
 type (

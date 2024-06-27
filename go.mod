@@ -1,4 +1,4 @@
-module github.com/bastean/codexgo
+module github.com/bastean/dsgo
 
 go 1.22
 

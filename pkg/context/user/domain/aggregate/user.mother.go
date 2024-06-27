@@ -1,8 +1,8 @@
 package aggregate
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/user/domain/valueobj"
 )
 
 func RandomUser() *User {

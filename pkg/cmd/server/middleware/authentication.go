@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/authentication/jwt"
-	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/authentication/jwt"
+	"github.com/bastean/dsgo/pkg/cmd/server/util/key"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )

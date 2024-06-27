@@ -10,9 +10,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/router"
-	"github.com/bastean/codexgo/pkg/cmd/server/service"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
+	"github.com/bastean/dsgo/pkg/cmd/server/router"
+	"github.com/bastean/dsgo/pkg/cmd/server/service"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/logger"
 )
 
 //go:embed static

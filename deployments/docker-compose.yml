@@ -25,7 +25,7 @@ services:
     ports:
       - ${MONGO_INITDB_PORT}:${MONGO_INITDB_PORT}
     volumes:
-      - codexgo-database:/data/db
+      - dsgo-database:/data/db
     restart: ${MONGO_RESTART}
     healthcheck:
       test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --quiet | grep 1
@@ -60,7 +60,7 @@ services:
       - ${SERVER_PROXY_PORT}:${SERVER_PROXY_PORT}
     volumes:
       - ${SERVER_VOLUMES_APP}
-      - codexgo-modules:/go/pkg/mod
+      - dsgo-modules:/go/pkg/mod
     restart: ${SERVER_RESTART}
     depends_on:
       broker:
@@ -69,9 +69,9 @@ services:
         condition: service_healthy
 
 volumes:
-  codexgo-database:
+  dsgo-database:
     name: ${DATABASE_VOLUME}
-  codexgo-server:
-    name: codexgo-server
-  codexgo-modules:
-    name: codexgo-modules
+  dsgo-server:
+    name: dsgo-server
+  dsgo-modules:
+    name: dsgo-modules

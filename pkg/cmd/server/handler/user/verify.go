@@ -3,9 +3,9 @@ package user
 import (
 	"net/http"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
-	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
-	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/user"
+	"github.com/bastean/dsgo/pkg/cmd/server/util/errs"
+	"github.com/bastean/dsgo/pkg/cmd/server/util/key"
 	"github.com/gin-gonic/gin"
 )
 

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/valueobjs"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/models"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/valueobjs"
 )
 
 var Type = struct {
@@ -32,14 +32,14 @@ var Status = struct {
 //
 // Nomenclature of a Routing Key (Topic):
 //   - organization.service.version.type.entity.event/command.status
-//   - codexgo.user.1.event.user.created.succeeded
+//   - dsgo.user.1.event.user.created.succeeded
 type RoutingKeyComponents struct {
 	Organization, Service, Version, Type, Entity, Event, Command, Status string
 }
 
 func NewRoutingKey(components *RoutingKeyComponents) string {
 	if components.Organization == "" {
-		components.Organization = "codexgo"
+		components.Organization = "dsgo"
 	}
 
 	organization, errOrganization := valueobjs.NewOrganization(components.Organization)

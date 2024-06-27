@@ -1,10 +1,10 @@
 package rabbitmq
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/models"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/communications"
 )
 
 func New(uri string, logger models.Logger, exchange *messages.Router, queues []*messages.Queue, consumers []messages.Consumer) (messages.Broker, error) {

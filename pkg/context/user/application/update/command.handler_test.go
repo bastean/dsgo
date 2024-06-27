@@ -3,14 +3,14 @@ package update_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
-	"github.com/bastean/codexgo/pkg/context/user/application/update"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/models"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/types"
+	"github.com/bastean/dsgo/pkg/context/user/application/update"
+	"github.com/bastean/dsgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/dsgo/pkg/context/user/domain/model"
+	"github.com/bastean/dsgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/dsgo/pkg/context/user/infrastructure/cryptographic"
+	"github.com/bastean/dsgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 

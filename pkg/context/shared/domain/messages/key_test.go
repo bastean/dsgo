@@ -3,7 +3,7 @@ package messages_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/messages"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -15,7 +15,7 @@ func (suite *RoutingKeyTestSuite) SetupTest() {}
 
 func (suite *RoutingKeyTestSuite) TestWithValidValue() {
 	components := &messages.RoutingKeyComponents{
-		Organization: "codexgo",
+		Organization: "dsgo",
 		Service:      "user",
 		Version:      "1",
 		Type:         messages.Type.Event,
@@ -24,7 +24,7 @@ func (suite *RoutingKeyTestSuite) TestWithValidValue() {
 		Status:       messages.Status.Succeeded,
 	}
 
-	expected := "codexgo.user.1.event.user.created.succeeded"
+	expected := "dsgo.user.1.event.user.created.succeeded"
 
 	actual := messages.NewRoutingKey(components)
 

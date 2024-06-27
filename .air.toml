@@ -4,7 +4,7 @@ testdata_dir = "testdata"
 
 [build]
   pre_cmd = ["make generate-required"]
-  cmd = "go build -buildvcs=false -o ./tmp/main ./cmd/codexgo"
+  cmd = "go build -buildvcs=false -o ./tmp/main ./cmd/dsgo"
   post_cmd = []
   bin = "./tmp/main"
   full_bin = ""

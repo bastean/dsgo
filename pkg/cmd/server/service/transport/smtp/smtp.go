@@ -1,7 +1,7 @@
 package smtp
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/transports"
 )
 
 type SMTP = *transports.SMTP

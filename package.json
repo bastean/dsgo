@@ -1,17 +1,17 @@
 {
   "private": true,
-  "name": "codexgo",
-  "version": "4.3.0",
-  "description": "codexGO",
+  "name": "dsgo",
+  "version": "0.0.0",
+  "description": "dsGO",
   "author": "Bastean <bastean@pm.me>",
   "license": "MIT",
-  "homepage": "https://github.com/bastean/codexgo#readme",
+  "homepage": "https://github.com/bastean/dsgo#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bastean/codexgo.git"
+    "url": "https://github.com/bastean/dsgo.git"
   },
   "bugs": {
-    "url": "https://github.com/bastean/codexgo/issues"
+    "url": "https://github.com/bastean/dsgo/issues"
   },
   "engines": {
     "node": ">=20",
@@ -56,7 +56,7 @@
     "git": {
       "requireBranch": "main",
       "commitMessage": "chore(release): v${version}",
-      "tagAnnotation": "codexgo ${version}",
+      "tagAnnotation": "dsgo ${version}",
       "tagName": "v${version}"
     },
     "github": {

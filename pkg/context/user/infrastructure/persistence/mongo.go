@@ -3,11 +3,11 @@ package persistence
 import (
 	"context"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/models"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/persistences"
+	"github.com/bastean/dsgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/dsgo/pkg/context/user/domain/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/loggers"
 )
 
 var (

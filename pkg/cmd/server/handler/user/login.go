@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/authentication/jwt"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
-	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
-	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
-	"github.com/bastean/codexgo/pkg/cmd/server/util/reply"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/authentication/jwt"
+	"github.com/bastean/dsgo/pkg/cmd/server/service/user"
+	"github.com/bastean/dsgo/pkg/cmd/server/util/errs"
+	"github.com/bastean/dsgo/pkg/cmd/server/util/key"
+	"github.com/bastean/dsgo/pkg/cmd/server/util/reply"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )

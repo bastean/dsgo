@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/smtp"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
-	"github.com/bastean/codexgo/pkg/context/user/domain/event"
+	"github.com/bastean/dsgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/shared/infrastructure/transports"
+	"github.com/bastean/dsgo/pkg/context/user/domain/event"
 )
 
 type Confirmation struct {
