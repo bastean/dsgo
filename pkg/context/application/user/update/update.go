@@ -1,0 +1,44 @@
+package update
+
+import (
+	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
+	"github.com/bastean/dsgo/pkg/context/domain/errors"
+	"github.com/bastean/dsgo/pkg/context/domain/model"
+	"github.com/bastean/dsgo/pkg/context/domain/types"
+)
+
+type Update struct {
+	Repository model.UserRepository
+}
+
+func (update *Update) Run(primitive *user.Primitive) (types.Empty, error) {
+	user, err := user.New(primitive)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "Run")
+	}
+
+	registered, err := update.Repository.Search(&model.UserRepositorySearchCriteria{
+		Id: user.Id,
+	})
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "Run")
+	}
+
+	user.Verified = registered.Verified
+
+	err = update.Repository.Update(user)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "Run")
+	}
+
+	return nil, nil
+}
+
+func New(repository model.UserRepository) model.UseCase[*user.Primitive, types.Empty] {
+	return &Update{
+		Repository: repository,
+	}
+}
