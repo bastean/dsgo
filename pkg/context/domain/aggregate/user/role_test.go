@@ -8,14 +8,14 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type EmailValueObjectTestSuite struct {
+type RoleValueObjectTestSuite struct {
 	suite.Suite
 }
 
-func (suite *EmailValueObjectTestSuite) SetupTest() {}
+func (suite *RoleValueObjectTestSuite) SetupTest() {}
 
-func (suite *EmailValueObjectTestSuite) TestWithInvalidValue() {
-	value, err := user.EmailWithInvalidValue()
+func (suite *RoleValueObjectTestSuite) TestWithInvalidValue() {
+	value, err := user.RoleWithInvalidValue()
 
 	var actual *errors.InvalidValue
 
@@ -23,16 +23,16 @@ func (suite *EmailValueObjectTestSuite) TestWithInvalidValue() {
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "NewEmail",
-		What:  "invalid email format",
+		Where: "NewRole",
+		What:  "role must be only one of these values: administrator, moderator, contributor",
 		Why: errors.Meta{
-			"Email": value,
+			"Role": value,
 		},
 	}}
 
 	suite.EqualError(expected, actual.Error())
 }
 
-func TestUnitEmailValueObjectSuite(t *testing.T) {
-	suite.Run(t, new(EmailValueObjectTestSuite))
+func TestUnitRoleValueObjectSuite(t *testing.T) {
+	suite.Run(t, new(RoleValueObjectTestSuite))
 }

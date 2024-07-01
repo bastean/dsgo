@@ -7,14 +7,16 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type Id struct {
-	Value string `validate:"uuid4"`
+var RoleOneOf = []string{"administrator", "moderator", "contributor"}
+
+type Role struct {
+	Value string `validate:"oneof=administrator moderator contributor"`
 }
 
-func NewId(value string) (*Id, error) {
+func NewRole(value string) (*Role, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Id{
+	valueObj := &Role{
 		Value: value,
 	}
 
@@ -22,10 +24,10 @@ func NewId(value string) (*Id, error) {
 
 	if err != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
-			Where: "NewId",
-			What:  "invalid uuid4 format",
+			Where: "NewRole",
+			What:  "role must be only one of these values: " + strings.Join(RoleOneOf, ", "),
 			Why: errors.Meta{
-				"Id": value,
+				"Role": value,
 			},
 		})
 	}

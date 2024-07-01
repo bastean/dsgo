@@ -5,14 +5,13 @@ import (
 
 	"github.com/bastean/dsgo/pkg/context/application/user/read"
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
-	"github.com/bastean/dsgo/pkg/context/domain/model"
 	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type ReadUseCaseTestSuite struct {
 	suite.Suite
-	sut        model.UseCase[*user.Id, *user.Primitive]
+	sut        *read.Read
 	repository *persistence.RepositoryMock
 }
 
@@ -24,17 +23,13 @@ func (suite *ReadUseCaseTestSuite) SetupTest() {
 func (suite *ReadUseCaseTestSuite) TestRead() {
 	user := user.Random()
 
-	id := user.Id
+	name := user.Name
 
-	criteria := &model.UserRepositorySearchCriteria{
-		Id: id,
-	}
-
-	suite.repository.On("Search", criteria).Return(user)
+	suite.repository.On("Search", name).Return(user)
 
 	expected := user.ToPrimitives()
 
-	actual, err := suite.sut.Run(id)
+	actual, err := suite.sut.Run(name.Value)
 
 	suite.NoError(err)
 

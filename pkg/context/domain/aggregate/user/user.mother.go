@@ -5,14 +5,13 @@ import (
 )
 
 func Random() *User {
-	id := IdWithValidValue()
-	email := EmailWithValidValue()
-	username := UsernameWithValidValue()
+	name := NameWithValidValue()
+	role := RoleWithValidValue()
 
 	user, err := New(&Primitive{
-		Id:       id.Value,
-		Email:    email.Value,
-		Username: username.Value,
+
+		Name: name.Value,
+		Role: role.Value,
 	})
 
 	if err != nil {
@@ -23,18 +22,16 @@ func Random() *User {
 }
 
 func RandomPrimitive() *Primitive {
-	id := IdWithValidValue()
-	email := EmailWithValidValue()
-	username := UsernameWithValidValue()
+	name := NameWithValidValue()
+	role := RoleWithValidValue()
 
 	user, err := New(&Primitive{
-		Id:       id.Value,
-		Email:    email.Value,
-		Username: username.Value,
+		Name: name.Value,
+		Role: role.Value,
 	})
 
 	if err != nil {
-		errors.Panic(err.Error(), "RandomUser")
+		errors.Panic(err.Error(), "RandomPrimitive")
 	}
 
 	return user.ToPrimitives()

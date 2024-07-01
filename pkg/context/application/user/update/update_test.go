@@ -5,15 +5,13 @@ import (
 
 	"github.com/bastean/dsgo/pkg/context/application/user/update"
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
-	"github.com/bastean/dsgo/pkg/context/domain/model"
-	"github.com/bastean/dsgo/pkg/context/domain/types"
 	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UpdateUseCaseTestSuite struct {
 	suite.Suite
-	sut        model.UseCase[*user.Primitive, types.Empty]
+	sut        *update.Update
 	repository *persistence.RepositoryMock
 }
 
@@ -27,15 +25,9 @@ func (suite *UpdateUseCaseTestSuite) TestUpdate() {
 
 	primitive := user.ToPrimitives()
 
-	criteria := &model.UserRepositorySearchCriteria{
-		Id: user.Id,
-	}
-
-	suite.repository.On("Search", criteria).Return(user)
-
 	suite.repository.On("Update", user)
 
-	_, err := suite.sut.Run(primitive)
+	err := suite.sut.Run(primitive)
 
 	suite.NoError(err)
 

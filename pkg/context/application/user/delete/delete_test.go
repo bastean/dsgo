@@ -5,15 +5,13 @@ import (
 
 	"github.com/bastean/dsgo/pkg/context/application/user/delete"
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
-	"github.com/bastean/dsgo/pkg/context/domain/model"
-	"github.com/bastean/dsgo/pkg/context/domain/types"
 	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type DeleteUseCaseTestSuite struct {
 	suite.Suite
-	sut        model.UseCase[*user.Id, types.Empty]
+	sut        *delete.Delete
 	repository *persistence.RepositoryMock
 }
 
@@ -25,17 +23,13 @@ func (suite *DeleteUseCaseTestSuite) SetupTest() {
 func (suite *DeleteUseCaseTestSuite) TestDelete() {
 	user := user.Random()
 
-	id := user.Id
+	name := user.Name
 
-	criteria := &model.UserRepositorySearchCriteria{
-		Id: id,
-	}
+	suite.repository.On("Search", name).Return(user)
 
-	suite.repository.On("Search", criteria).Return(user)
+	suite.repository.On("Delete", name)
 
-	suite.repository.On("Delete", id)
-
-	_, err := suite.sut.Run(id)
+	err := suite.sut.Run(name.Value)
 
 	suite.NoError(err)
 

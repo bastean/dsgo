@@ -12,10 +12,8 @@ import (
 )
 
 type UserDocument struct {
-	Id       string `bson:"id,omitempty"`
-	Email    string `bson:"email,omitempty"`
-	Username string `bson:"username,omitempty"`
-	Verified bool   `bson:"verified,omitempty"`
+	Name string `bson:"name,omitempty"`
+	Role string `bson:"role,omitempty"`
 }
 
 type UserCollection struct {

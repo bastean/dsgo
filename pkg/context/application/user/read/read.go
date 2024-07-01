@@ -10,10 +10,14 @@ type Read struct {
 	Repository model.UserRepository
 }
 
-func (read *Read) Run(id *user.Id) (*user.Primitive, error) {
-	user, err := read.Repository.Search(&model.UserRepositorySearchCriteria{
-		Id: id,
-	})
+func (read *Read) Run(name string) (*user.Primitive, error) {
+	nameVO, err := user.NewName(name)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "Run")
+	}
+
+	user, err := read.Repository.Search(nameVO)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")
@@ -22,7 +26,7 @@ func (read *Read) Run(id *user.Id) (*user.Primitive, error) {
 	return user.ToPrimitives(), nil
 }
 
-func New(repository model.UserRepository) model.UseCase[*user.Id, *user.Primitive] {
+func New(repository model.UserRepository) *Read {
 	return &Read{
 		Repository: repository,
 	}

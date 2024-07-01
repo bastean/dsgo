@@ -7,14 +7,17 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type Email struct {
-	Value string `validate:"email"`
+const NameMinCharactersLength = "2"
+const NameMaxCharactersLength = "20"
+
+type Name struct {
+	Value string `validate:"gte=2,lte=20,alphanum"`
 }
 
-func NewEmail(value string) (*Email, error) {
+func NewName(value string) (*Name, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Email{
+	valueObj := &Name{
 		Value: value,
 	}
 
@@ -22,10 +25,10 @@ func NewEmail(value string) (*Email, error) {
 
 	if err != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
-			Where: "NewEmail",
-			What:  "invalid email format",
+			Where: "NewName",
+			What:  "name must be between " + NameMinCharactersLength + " to " + NameMaxCharactersLength + " characters and be alphanumeric only",
 			Why: errors.Meta{
-				"Email": value,
+				"Name": value,
 			},
 		})
 	}

@@ -5,43 +5,34 @@ import (
 )
 
 type User struct {
-	*Id
-	*Email
-	*Username
-	*Verified
+	*Name
+	*Role
 }
 
 type Primitive struct {
-	Id, Email, Username string
-	Verified            bool
+	Name, Role string
 }
 
 func create(primitive *Primitive) (*User, error) {
-	idVO, errId := NewId(primitive.Id)
-	emailVO, errEmail := NewEmail(primitive.Email)
-	usernameVO, errUsername := NewUsername(primitive.Username)
-	verifiedVO, errVerified := NewVerified(primitive.Verified)
+	nameVO, errName := NewName(primitive.Name)
+	roleVO, errRole := NewRole(primitive.Role)
 
-	err := errors.Join(errId, errEmail, errUsername, errVerified)
+	err := errors.Join(errName, errRole)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "create")
 	}
 
 	return &User{
-		Id:       idVO,
-		Email:    emailVO,
-		Username: usernameVO,
-		Verified: verifiedVO,
+		Name: nameVO,
+		Role: roleVO,
 	}, nil
 }
 
 func (user *User) ToPrimitives() *Primitive {
 	return &Primitive{
-		Id:       user.Id.Value,
-		Email:    user.Email.Value,
-		Username: user.Username.Value,
-		Verified: user.Verified.Value,
+		Name: user.Name.Value,
+		Role: user.Role.Value,
 	}
 }
 
@@ -56,8 +47,6 @@ func FromPrimitives(primitive *Primitive) (*User, error) {
 }
 
 func New(primitive *Primitive) (*User, error) {
-	primitive.Verified = false
-
 	user, err := create(primitive)
 
 	if err != nil {
