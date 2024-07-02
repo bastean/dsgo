@@ -11,12 +11,12 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type MongoRepositoryTestSuite struct {
+type MongoUserRepositoryTestSuite struct {
 	suite.Suite
 	sut model.UserRepository
 }
 
-func (suite *MongoRepositoryTestSuite) SetupTest() {
+func (suite *MongoUserRepositoryTestSuite) SetupTest() {
 	uri := os.Getenv("DATABASE_URI")
 
 	databaseName := "dsgo-test"
@@ -25,16 +25,15 @@ func (suite *MongoRepositoryTestSuite) SetupTest() {
 
 	collectionName := "users-test"
 
-	suite.sut, _ = mongo.NewMongoCollection(database, collectionName)
+	suite.sut, _ = mongo.NewUserCollection(database, collectionName)
 }
 
-func (suite *MongoRepositoryTestSuite) TestSave() {
+func (suite *MongoUserRepositoryTestSuite) TestSave() {
 	user := user.Random()
-
 	suite.NoError(suite.sut.Save(user))
 }
 
-func (suite *MongoRepositoryTestSuite) TestSaveDuplicate() {
+func (suite *MongoUserRepositoryTestSuite) TestSaveDuplicate() {
 	user := user.Random()
 
 	suite.NoError(suite.sut.Save(user))
@@ -50,7 +49,7 @@ func (suite *MongoRepositoryTestSuite) TestSaveDuplicate() {
 		Where: "HandleMongoDuplicateKeyError",
 		What:  "already registered",
 		Why: errors.Meta{
-			"Field": "Id",
+			"Field": "Name",
 		},
 		Who: actual.Who,
 	}}
@@ -58,15 +57,7 @@ func (suite *MongoRepositoryTestSuite) TestSaveDuplicate() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func (suite *MongoRepositoryTestSuite) TestVerify() {
-	user := user.Random()
-
-	suite.NoError(suite.sut.Save(user))
-
-	suite.NoError(suite.sut.Verify(user.Id))
-}
-
-func (suite *MongoRepositoryTestSuite) TestUpdate() {
+func (suite *MongoUserRepositoryTestSuite) TestUpdate() {
 	user := user.Random()
 
 	suite.NoError(suite.sut.Save(user))
@@ -74,32 +65,26 @@ func (suite *MongoRepositoryTestSuite) TestUpdate() {
 	suite.NoError(suite.sut.Update(user))
 }
 
-func (suite *MongoRepositoryTestSuite) TestDelete() {
+func (suite *MongoUserRepositoryTestSuite) TestDelete() {
 	user := user.Random()
 
 	suite.NoError(suite.sut.Save(user))
 
-	suite.NoError(suite.sut.Delete(user.Id))
+	suite.NoError(suite.sut.Delete(user.Name))
 }
 
-func (suite *MongoRepositoryTestSuite) TestSearch() {
+func (suite *MongoUserRepositoryTestSuite) TestSearch() {
 	expected := user.Random()
 
 	suite.NoError(suite.sut.Save(expected))
 
-	criteria := &model.UserRepositorySearchCriteria{
-		Id: expected.Id,
-	}
-
-	user, err := suite.sut.Search(criteria)
+	actual, err := suite.sut.Search(expected.Name)
 
 	suite.NoError(err)
-
-	actual := user
 
 	suite.Equal(expected, actual)
 }
 
-func TestIntegrationMongoRepositorySuite(t *testing.T) {
-	suite.Run(t, new(MongoRepositoryTestSuite))
+func TestIntegrationMongoUserRepositorySuite(t *testing.T) {
+	suite.Run(t, new(MongoUserRepositoryTestSuite))
 }

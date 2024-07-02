@@ -34,30 +34,7 @@ func (db *UserCollection) Save(user *user.User) error {
 			Where: "Save",
 			What:  "failure to save a user",
 			Why: errors.Meta{
-				"Id": user.Id.Value,
-			},
-			Who: err,
-		})
-	}
-
-	return nil
-}
-
-func (db *UserCollection) Verify(id *user.Id) error {
-	filter := bson.D{{Key: "id", Value: id.Value}}
-
-	_, err := db.collection.UpdateOne(context.Background(), filter, bson.D{
-		{Key: "$set", Value: bson.D{
-			{Key: "verified", Value: true},
-		}},
-	})
-
-	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
-			Where: "Verify",
-			What:  "failure to verify a user",
-			Why: errors.Meta{
-				"Id": id.Value,
+				"Name": user.Name.Value,
 			},
 			Who: err,
 		})
@@ -69,7 +46,7 @@ func (db *UserCollection) Verify(id *user.Id) error {
 func (db *UserCollection) Update(user *user.User) error {
 	updatedUser := UserDocument(*user.ToPrimitives())
 
-	filter := bson.D{{Key: "id", Value: user.Id.Value}}
+	filter := bson.D{{Key: "name", Value: user.Name.Value}}
 
 	_, err := db.collection.ReplaceOne(context.Background(), filter, &updatedUser)
 
@@ -78,7 +55,7 @@ func (db *UserCollection) Update(user *user.User) error {
 			Where: "Update",
 			What:  "failure to update a user",
 			Why: errors.Meta{
-				"Id": user.Id.Value,
+				"Name": user.Name.Value,
 			},
 			Who: err,
 		})
@@ -87,8 +64,8 @@ func (db *UserCollection) Update(user *user.User) error {
 	return nil
 }
 
-func (db *UserCollection) Delete(id *user.Id) error {
-	filter := bson.D{{Key: "id", Value: id.Value}}
+func (db *UserCollection) Delete(name *user.Name) error {
+	filter := bson.D{{Key: "name", Value: name.Value}}
 
 	_, err := db.collection.DeleteOne(context.Background(), filter)
 
@@ -97,7 +74,7 @@ func (db *UserCollection) Delete(id *user.Id) error {
 			Where: "Delete",
 			What:  "failure to delete a user",
 			Why: errors.Meta{
-				"Id": id.Value,
+				"Name": name.Value,
 			},
 			Who: err,
 		})
@@ -106,23 +83,13 @@ func (db *UserCollection) Delete(id *user.Id) error {
 	return nil
 }
 
-func (db *UserCollection) Search(criteria *model.UserRepositorySearchCriteria) (*user.User, error) {
-	var filter bson.D
-	var index string
-
-	switch {
-	case criteria.Id != nil:
-		filter = bson.D{{Key: "id", Value: criteria.Id.Value}}
-		index = criteria.Id.Value
-	case criteria.Email != nil:
-		filter = bson.D{{Key: "email", Value: criteria.Email.Value}}
-		index = criteria.Email.Value
-	}
+func (db *UserCollection) Search(name *user.Name) (*user.User, error) {
+	filter := bson.D{{Key: "name", Value: name.Value}}
 
 	result := db.collection.FindOne(context.Background(), filter)
 
 	if err := result.Err(); err != nil {
-		return nil, HandleMongoDocumentNotFound(index, err)
+		return nil, HandleMongoDocumentNotFound(name.Value, err)
 	}
 
 	primitive := new(user.Primitive)
@@ -134,7 +101,7 @@ func (db *UserCollection) Search(criteria *model.UserRepositorySearchCriteria) (
 			Where: "Search",
 			What:  "failure to decode a result",
 			Why: errors.Meta{
-				"Index": index,
+				"Index": name.Value,
 			},
 			Who: err,
 		})
@@ -148,7 +115,7 @@ func (db *UserCollection) Search(criteria *model.UserRepositorySearchCriteria) (
 			What:  "failure to create an aggregate from a primitive",
 			Why: errors.Meta{
 				"Primitive": primitive,
-				"Index":     index,
+				"Index":     name.Value,
 			},
 			Who: err,
 		})
@@ -157,20 +124,12 @@ func (db *UserCollection) Search(criteria *model.UserRepositorySearchCriteria) (
 	return user, nil
 }
 
-func NewMongoCollection(mdb *MongoDB, collectionName string) (model.UserRepository, error) {
+func NewUserCollection(mdb *MongoDB, collectionName string) (model.UserRepository, error) {
 	collection := mdb.Database.Collection(collectionName)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
 		{
-			Keys:    bson.D{{Key: "id", Value: 1}},
-			Options: options.Index().SetUnique(true),
-		},
-		{
-			Keys:    bson.D{{Key: "email", Value: 1}},
-			Options: options.Index().SetUnique(true),
-		},
-		{
-			Keys:    bson.D{{Key: "username", Value: 1}},
+			Keys:    bson.D{{Key: "name", Value: 1}},
 			Options: options.Index().SetUnique(true),
 		},
 	})

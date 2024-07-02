@@ -12,11 +12,11 @@ import (
 type UpdateUseCaseTestSuite struct {
 	suite.Suite
 	sut        *update.Update
-	repository *persistence.RepositoryMock
+	repository *persistence.UserRepositoryMock
 }
 
 func (suite *UpdateUseCaseTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
+	suite.repository = new(persistence.UserRepositoryMock)
 	suite.sut = update.New(suite.repository)
 }
 

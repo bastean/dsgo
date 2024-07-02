@@ -12,11 +12,11 @@ import (
 type DeleteUseCaseTestSuite struct {
 	suite.Suite
 	sut        *delete.Delete
-	repository *persistence.RepositoryMock
+	repository *persistence.UserRepositoryMock
 }
 
 func (suite *DeleteUseCaseTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
+	suite.repository = new(persistence.UserRepositoryMock)
 	suite.sut = delete.New(suite.repository)
 }
 

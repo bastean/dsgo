@@ -12,11 +12,11 @@ import (
 type CreateUseCaseTestSuite struct {
 	suite.Suite
 	sut        *create.Create
-	repository *persistence.RepositoryMock
+	repository *persistence.UserRepositoryMock
 }
 
 func (suite *CreateUseCaseTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
+	suite.repository = new(persistence.UserRepositoryMock)
 	suite.sut = create.New(suite.repository)
 }
 
