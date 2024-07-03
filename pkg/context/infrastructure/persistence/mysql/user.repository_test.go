@@ -1,4 +1,4 @@
-package mongo_test
+package mysql_test
 
 import (
 	"os"
@@ -7,33 +7,31 @@ import (
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/dsgo/pkg/context/domain/errors"
 	"github.com/bastean/dsgo/pkg/context/domain/model"
-	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence/mongo"
+	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence/mysql"
 	"github.com/stretchr/testify/suite"
 )
 
-type MongoUserRepositoryTestSuite struct {
+type MySQLUserRepositoryTestSuite struct {
 	suite.Suite
 	sut model.UserRepository
 }
 
-func (suite *MongoUserRepositoryTestSuite) SetupTest() {
-	uri := os.Getenv("MONGO_URI")
+func (suite *MySQLUserRepositoryTestSuite) SetupTest() {
+	dsn := os.Getenv("MYSQL_DSN")
 
-	name := os.Getenv("MONGO_DATABASE")
+	name := os.Getenv("MYSQL_DATABASE")
 
-	database, _ := mongo.NewMongoDatabase(uri, name)
+	database, _ := mysql.NewMySQLDatabase(dsn, name)
 
-	collection := "users-test"
-
-	suite.sut, _ = mongo.NewUserCollection(database, collection)
+	suite.sut, _ = mysql.NewUserTable(database)
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestSave() {
+func (suite *MySQLUserRepositoryTestSuite) TestSave() {
 	user := user.Random()
 	suite.NoError(suite.sut.Save(user))
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestSaveDuplicate() {
+func (suite *MySQLUserRepositoryTestSuite) TestSaveDuplicate() {
 	user := user.Random()
 
 	suite.NoError(suite.sut.Save(user))
@@ -46,18 +44,15 @@ func (suite *MongoUserRepositoryTestSuite) TestSaveDuplicate() {
 
 	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleMongoDuplicateKeyError",
+		Where: "Save",
 		What:  "already registered",
-		Why: errors.Meta{
-			"Field": "Name",
-		},
-		Who: actual.Who,
+		Who:   actual.Who,
 	}}
 
 	suite.EqualError(expected, actual.Error())
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestUpdate() {
+func (suite *MySQLUserRepositoryTestSuite) TestUpdate() {
 	user := user.Random()
 
 	suite.NoError(suite.sut.Save(user))
@@ -65,7 +60,7 @@ func (suite *MongoUserRepositoryTestSuite) TestUpdate() {
 	suite.NoError(suite.sut.Update(user))
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestDelete() {
+func (suite *MySQLUserRepositoryTestSuite) TestDelete() {
 	user := user.Random()
 
 	suite.NoError(suite.sut.Save(user))
@@ -73,7 +68,7 @@ func (suite *MongoUserRepositoryTestSuite) TestDelete() {
 	suite.NoError(suite.sut.Delete(user.Name))
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestSearch() {
+func (suite *MySQLUserRepositoryTestSuite) TestSearch() {
 	expected := user.Random()
 
 	suite.NoError(suite.sut.Save(expected))
@@ -85,6 +80,6 @@ func (suite *MongoUserRepositoryTestSuite) TestSearch() {
 	suite.Equal(expected, actual)
 }
 
-func TestIntegrationMongoUserRepositorySuite(t *testing.T) {
-	suite.Run(t, new(MongoUserRepositoryTestSuite))
+func TestIntegrationMySQLUserRepositorySuite(t *testing.T) {
+	suite.Run(t, new(MySQLUserRepositoryTestSuite))
 }

@@ -216,14 +216,14 @@ docker-it:
 
 compose-dev-down:
 	${compose-env} .env.dev down
-	docker volume rm dsgo-database-dev -f
+	docker volume rm -f dsgo-database-mongo-dev dsgo-database-mysql-dev
 
 compose-dev: compose-dev-down
 	${compose-env} .env.dev up
 
 compose-test-down:
 	${compose-env} .env.test down
-	docker volume rm dsgo-database-test -f
+	docker volume rm -f dsgo-database-mongo-test dsgo-database-mysql-test
 
 compose-test-integration: compose-test-down
 	${compose-env} .env.test --env-file .env.demo.test.integration up --exit-code-from server

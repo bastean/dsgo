@@ -25,8 +25,6 @@ func (suite *DeleteUseCaseTestSuite) TestDelete() {
 
 	name := user.Name
 
-	suite.repository.On("Search", name).Return(user)
-
 	suite.repository.On("Delete", name)
 
 	err := suite.sut.Run(name.Value)

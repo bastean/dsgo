@@ -17,13 +17,7 @@ func (delete *Delete) Run(name string) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	user, err := delete.Repository.Search(nameVO)
-
-	if err != nil {
-		return errors.BubbleUp(err, "Run")
-	}
-
-	err = delete.Repository.Delete(user.Name)
+	err = delete.Repository.Delete(nameVO)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

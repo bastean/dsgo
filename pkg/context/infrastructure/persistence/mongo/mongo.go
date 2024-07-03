@@ -48,6 +48,20 @@ func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 	}, nil
 }
 
+func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) error {
+	err := mdb.Client.Disconnect(ctx)
+
+	if err != nil {
+		return errors.NewInternal(&errors.Bubble{
+			Where: "CloseMongoDatabase",
+			What:  "failure to close connection with mongodb",
+			Who:   err,
+		})
+	}
+
+	return nil
+}
+
 func HandleMongoDuplicateKeyError(err error) error {
 	re := regexp.MustCompile(`{ [A-Za-z0-9]+:`)
 
@@ -76,18 +90,4 @@ func HandleMongoDocumentNotFound(index string, err error) error {
 		},
 		Who: err,
 	})
-}
-
-func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) error {
-	err := mdb.Client.Disconnect(ctx)
-
-	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
-			Where: "CloseMongoDatabase",
-			What:  "failure to close connection with mongodb",
-			Who:   err,
-		})
-	}
-
-	return nil
 }

@@ -1,5 +1,5 @@
 services:
-  database:
+  database-mongo:
     container_name: ${MONGO_CONTAINER_NAME}
     image: mongo:4.4
     environment:
@@ -9,10 +9,29 @@ services:
     ports:
       - ${MONGO_INITDB_PORT}:${MONGO_INITDB_PORT}
     volumes:
-      - dsgo-database:/data/db
+      - dsgo-database-mongo:/data/db
     restart: ${MONGO_RESTART}
     healthcheck:
       test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --quiet | grep 1
+      interval: 12s
+      timeout: 12s
+      retries: 12
+
+  database-mysql:
+    container_name: ${MYSQL_CONTAINER_NAME}
+    image: mysql:8.3
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    volumes:
+      - dsgo-database-mysql:/var/lib/mysql
+    restart: ${MYSQL_RESTART}
+    healthcheck:
+      test: mysqladmin ping -h database-mysql --silent
       interval: 12s
       timeout: 12s
       retries: 12
@@ -25,7 +44,10 @@ services:
       dockerfile: deployments/Dockerfile
       target: ${SERVER_BUILD_TARGET}
     environment:
-      DATABASE_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database:${MONGO_INITDB_PORT}"
+      MONGO_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database-mongo:${MONGO_INITDB_PORT}"
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      MYSQL_DSN: "${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(database-mysql:${MYSQL_PORT})"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       ALLOWED_HOSTS: ${SERVER_ALLOWED_HOSTS}
       URL: ${SERVER_URL}
       GIN_MODE: ${SERVER_MODE}
@@ -39,12 +61,16 @@ services:
       - dsgo-modules:/go/pkg/mod
     restart: ${SERVER_RESTART}
     depends_on:
-      database:
+      database-mongo:
+        condition: service_healthy
+      database-mysql:
         condition: service_healthy
 
 volumes:
-  dsgo-database:
-    name: ${DATABASE_VOLUME}
+  dsgo-database-mongo:
+    name: ${MONGO_DATABASE_VOLUME}
+  dsgo-database-mysql:
+    name: ${MYSQL_DATABASE_VOLUME}
   dsgo-server:
     name: dsgo-server
   dsgo-modules:
