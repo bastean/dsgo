@@ -17,9 +17,9 @@ type MongoUserRepositoryTestSuite struct {
 }
 
 func (suite *MongoUserRepositoryTestSuite) SetupTest() {
-	uri := os.Getenv("MONGO_URI")
+	uri := os.Getenv("DATABASE_MONGO_URI")
 
-	name := os.Getenv("MONGO_DATABASE")
+	name := os.Getenv("DATABASE_MONGO_NAME")
 
 	database, _ := mongo.NewMongoDatabase(uri, name)
 

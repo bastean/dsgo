@@ -19,7 +19,7 @@ func usage() {
 }
 
 func main() {
-	flag.StringVar(&port, "p", os.Getenv("PORT"), "Port")
+	flag.StringVar(&port, "p", os.Getenv("SERVER_GIN_PORT"), "Port")
 
 	flag.Usage = usage
 

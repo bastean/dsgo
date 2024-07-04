@@ -17,9 +17,9 @@ type MySQLUserRepositoryTestSuite struct {
 }
 
 func (suite *MySQLUserRepositoryTestSuite) SetupTest() {
-	dsn := os.Getenv("MYSQL_DSN")
+	dsn := os.Getenv("DATABASE_MYSQL_DSN")
 
-	name := os.Getenv("MYSQL_DATABASE")
+	name := os.Getenv("DATABASE_MYSQL_NAME")
 
 	database, _ := mysql.NewMySQLDatabase(dsn, name)
 

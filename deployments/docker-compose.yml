@@ -1,35 +1,35 @@
 services:
   database-mongo:
-    container_name: ${MONGO_CONTAINER_NAME}
+    container_name: ${DATABASE_MONGO_CONTAINER_NAME}
     image: mongo:4.4
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_MONGO_ROOT_PASSWORD}
     command: mongod --quiet --logpath /dev/null
     ports:
-      - ${MONGO_INITDB_PORT}:${MONGO_INITDB_PORT}
+      - ${DATABASE_MONGO_PORT}:${DATABASE_MONGO_PORT}
     volumes:
       - dsgo-database-mongo:/data/db
-    restart: ${MONGO_RESTART}
+    restart: ${DATABASE_MONGO_CONTAINER_RESTART}
     healthcheck:
-      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --quiet | grep 1
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${DATABASE_MONGO_ROOT_USERNAME} -p ${DATABASE_MONGO_ROOT_PASSWORD} --quiet | grep 1
       interval: 12s
       timeout: 12s
       retries: 12
 
   database-mysql:
-    container_name: ${MYSQL_CONTAINER_NAME}
+    container_name: ${DATABASE_MYSQL_CONTAINER_NAME}
     image: mysql:8.3
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_MYSQL_NAME}
+      MYSQL_USER: ${DATABASE_MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_MYSQL_PASSWORD}
     ports:
-      - ${MYSQL_PORT}:${MYSQL_PORT}
+      - ${DATABASE_MYSQL_PORT}:${DATABASE_MYSQL_PORT}
     volumes:
       - dsgo-database-mysql:/var/lib/mysql
-    restart: ${MYSQL_RESTART}
+    restart: ${DATABASE_MYSQL_CONTAINER_RESTART}
     healthcheck:
       test: mysqladmin ping -h database-mysql --silent
       interval: 12s
@@ -42,25 +42,25 @@ services:
     build:
       context: ..
       dockerfile: deployments/Dockerfile
-      target: ${SERVER_BUILD_TARGET}
+      target: ${SERVER_IMAGE_BUILD_TARGET}
     environment:
-      MONGO_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database-mongo:${MONGO_INITDB_PORT}"
-      MONGO_DATABASE: ${MONGO_DATABASE}
-      MYSQL_DSN: "${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(database-mysql:${MYSQL_PORT})"
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      SQLITE_DATABASE: ${SQLITE_DATABASE}
-      ALLOWED_HOSTS: ${SERVER_ALLOWED_HOSTS}
-      URL: ${SERVER_URL}
-      GIN_MODE: ${SERVER_MODE}
-      PORT: ${SERVER_PORT}
-    command: ${SERVER_COMMAND}
+      DATABASE_MONGO_URI: "mongodb://${DATABASE_MONGO_ROOT_USERNAME}:${DATABASE_MONGO_ROOT_PASSWORD}@database-mongo:${DATABASE_MONGO_PORT}"
+      DATABASE_MONGO_NAME: ${DATABASE_MONGO_NAME}
+      DATABASE_MYSQL_DSN: "${DATABASE_MYSQL_USERNAME}:${DATABASE_MYSQL_PASSWORD}@tcp(database-mysql:${DATABASE_MYSQL_PORT})"
+      DATABASE_MYSQL_NAME: ${DATABASE_MYSQL_NAME}
+      DATABASE_SQLITE_NAME: ${DATABASE_SQLITE_NAME}
+      SERVER_URL: "${SERVER_URL}:${SERVER_GIN_PORT}"
+      SERVER_GIN_PORT: ${SERVER_GIN_PORT}
+      GIN_MODE: ${SERVER_GIN_MODE}
+      SERVER_GIN_ALLOWED_HOSTS: ${SERVER_GIN_ALLOWED_HOSTS}
+    command: ${SERVER_CONTAINER_START}
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
-      - ${SERVER_PROXY_PORT}:${SERVER_PROXY_PORT}
+      - ${SERVER_GIN_PORT}:${SERVER_GIN_PORT}
+      - ${SERVER_AIR_PROXY_PORT}:${SERVER_AIR_PROXY_PORT}
     volumes:
-      - ${SERVER_VOLUMES_APP}
+      - ${SERVER_CONTAINER_VOLUME}
       - dsgo-modules:/go/pkg/mod
-    restart: ${SERVER_RESTART}
+    restart: ${SERVER_CONTAINER_RESTART}
     depends_on:
       database-mongo:
         condition: service_healthy
@@ -69,9 +69,9 @@ services:
 
 volumes:
   dsgo-database-mongo:
-    name: ${MONGO_DATABASE_VOLUME}
+    name: ${DATABASE_MONGO_CONTAINER_VOLUME}
   dsgo-database-mysql:
-    name: ${MYSQL_DATABASE_VOLUME}
+    name: ${DATABASE_MYSQL_CONTAINER_VOLUME}
   dsgo-server:
     name: dsgo-server
   dsgo-modules:

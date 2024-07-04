@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-var ServerURL = os.Getenv("URL")
+var ServerURL = os.Getenv("SERVER_URL")
 
 var Broker = &struct {
 	URI string
@@ -31,7 +31,7 @@ var SMTP = &struct {
 var Security = &struct {
 	AllowedHosts string
 }{
-	AllowedHosts: os.Getenv("ALLOWED_HOSTS"),
+	AllowedHosts: os.Getenv("SERVER_GIN_ALLOWED_HOSTS"),
 }
 
 var JWT = &struct {

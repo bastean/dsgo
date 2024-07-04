@@ -23,7 +23,7 @@ func (suite *SQLiteUserRepositoryTestSuite) SetupTest() {
 
 	os.Mkdir(suite.dirTemp, os.ModePerm)
 
-	filename := os.Getenv("SQLITE_DATABASE")
+	filename := os.Getenv("DATABASE_SQLITE_NAME")
 
 	path := filepath.Join(suite.dirTemp, filename)
 
