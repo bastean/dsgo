@@ -17,9 +17,7 @@ type MongoDB struct {
 	*mongo.Database
 }
 
-func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
-	var err error
-
+func NewMongoDatabase(uri, name string) (*MongoDB, error) {
 	clientOptions := options.Client().ApplyURI(uri)
 
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -44,7 +42,7 @@ func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 
 	return &MongoDB{
 		Client:   client,
-		Database: client.Database(databaseName),
+		Database: client.Database(name),
 	}, nil
 }
 

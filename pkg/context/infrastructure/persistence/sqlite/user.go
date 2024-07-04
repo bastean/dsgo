@@ -1,4 +1,4 @@
-package mysql
+package sqlite
 
 import (
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
@@ -123,7 +123,7 @@ func (db *UserTable) Search(name *user.Name) (*user.User, error) {
 	return user, nil
 }
 
-func NewUserTable(db *MySQL) (model.UserRepository, error) {
+func NewUserTable(db *SQLite) (model.UserRepository, error) {
 	err := db.Client.AutoMigrate(&User{})
 
 	if err != nil {

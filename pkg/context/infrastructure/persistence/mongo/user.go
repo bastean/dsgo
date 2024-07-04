@@ -136,7 +136,7 @@ func NewUserCollection(mdb *MongoDB, collectionName string) (model.UserRepositor
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewMongoCollection",
+			Where: "NewUserCollection",
 			What:  "failure to create indexes for user collection",
 			Why: errors.Meta{
 				"Collection": collectionName,
