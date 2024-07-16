@@ -17,11 +17,11 @@ func (suite *RoleValueObjectTestSuite) SetupTest() {}
 func (suite *RoleValueObjectTestSuite) TestWithInvalidValue() {
 	value, err := user.RoleWithInvalidValue()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewRole",
 		What:  "role must be only one of these values: administrator, moderator, contributor",

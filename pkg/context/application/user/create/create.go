@@ -3,21 +3,22 @@ package create
 import (
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/dsgo/pkg/context/domain/errors"
-	"github.com/bastean/dsgo/pkg/context/domain/model"
+	"github.com/bastean/dsgo/pkg/context/domain/repository"
+	"github.com/bastean/dsgo/pkg/context/domain/usecase"
 )
 
 type Create struct {
-	Repository model.UserRepository
+	repository.User
 }
 
 func (create *Create) Run(primitive *user.Primitive) error {
-	user, err := user.New(primitive)
+	new, err := user.New(primitive)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = create.Repository.Save(user)
+	err = create.User.Save(new)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
@@ -26,8 +27,8 @@ func (create *Create) Run(primitive *user.Primitive) error {
 	return nil
 }
 
-func New(repository model.UserRepository) *Create {
+func New(repository repository.User) usecase.Create {
 	return &Create{
-		Repository: repository,
+		User: repository,
 	}
 }

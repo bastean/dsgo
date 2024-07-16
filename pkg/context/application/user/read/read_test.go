@@ -5,31 +5,30 @@ import (
 
 	"github.com/bastean/dsgo/pkg/context/application/user/read"
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
+	"github.com/bastean/dsgo/pkg/context/domain/usecase"
 	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
-type ReadUseCaseTestSuite struct {
+type ReadTestSuite struct {
 	suite.Suite
-	sut        *read.Read
-	repository *persistence.UserRepositoryMock
+	sut        usecase.Read
+	repository *persistence.UserMock
 }
 
-func (suite *ReadUseCaseTestSuite) SetupTest() {
-	suite.repository = new(persistence.UserRepositoryMock)
+func (suite *ReadTestSuite) SetupTest() {
+	suite.repository = new(persistence.UserMock)
 	suite.sut = read.New(suite.repository)
 }
 
-func (suite *ReadUseCaseTestSuite) TestRead() {
+func (suite *ReadTestSuite) TestRead() {
 	user := user.Random()
 
-	name := user.Name
-
-	suite.repository.On("Search", name).Return(user)
+	suite.repository.On("Search", user.Name).Return(user)
 
 	expected := user.ToPrimitives()
 
-	actual, err := suite.sut.Run(name.Value)
+	actual, err := suite.sut.Run(user.Name)
 
 	suite.NoError(err)
 
@@ -38,6 +37,6 @@ func (suite *ReadUseCaseTestSuite) TestRead() {
 	suite.EqualValues(expected, actual)
 }
 
-func TestUnitReadUseCaseSuite(t *testing.T) {
-	suite.Run(t, new(ReadUseCaseTestSuite))
+func TestUnitReadSuite(t *testing.T) {
+	suite.Run(t, new(ReadTestSuite))
 }

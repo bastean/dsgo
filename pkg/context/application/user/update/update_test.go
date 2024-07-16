@@ -5,18 +5,19 @@ import (
 
 	"github.com/bastean/dsgo/pkg/context/application/user/update"
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
+	"github.com/bastean/dsgo/pkg/context/domain/usecase"
 	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UpdateUseCaseTestSuite struct {
 	suite.Suite
-	sut        *update.Update
-	repository *persistence.UserRepositoryMock
+	sut        usecase.Update
+	repository *persistence.UserMock
 }
 
 func (suite *UpdateUseCaseTestSuite) SetupTest() {
-	suite.repository = new(persistence.UserRepositoryMock)
+	suite.repository = new(persistence.UserMock)
 	suite.sut = update.New(suite.repository)
 }
 

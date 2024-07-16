@@ -9,14 +9,14 @@ import (
 )
 
 type MySQL struct {
-	Client *gorm.DB
+	Session *gorm.DB
 }
 
-func NewMySQLDatabase(dsn, name string) (*MySQL, error) {
+func Open(dsn, name string) (*MySQL, error) {
 	queryParams := "charset=utf8mb4&parseTime=True&loc=Local"
 	dsn = fmt.Sprintf("%s/%s?%s", dsn, name, queryParams)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	session, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		TranslateError: true,
 	})
 
@@ -29,12 +29,12 @@ func NewMySQLDatabase(dsn, name string) (*MySQL, error) {
 	}
 
 	return &MySQL{
-		Client: db,
+		Session: session,
 	}, nil
 }
 
-func CloseMySQLDatabase(mdb *MySQL) error {
-	db, err := mdb.Client.DB()
+func Close(mySQL *MySQL) error {
+	session, err := mySQL.Session.DB()
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -44,7 +44,7 @@ func CloseMySQLDatabase(mdb *MySQL) error {
 		})
 	}
 
-	err = db.Close()
+	err = session.Close()
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{

@@ -7,11 +7,11 @@ import (
 )
 
 type SQLite struct {
-	Client *gorm.DB
+	Session *gorm.DB
 }
 
-func New(filename string) (*SQLite, error) {
-	db, err := gorm.Open(sqlite.Open(filename), &gorm.Config{
+func Open(filename string) (*SQLite, error) {
+	session, err := gorm.Open(sqlite.Open(filename), &gorm.Config{
 		TranslateError: true,
 	})
 
@@ -24,12 +24,12 @@ func New(filename string) (*SQLite, error) {
 	}
 
 	return &SQLite{
-		Client: db,
+		Session: session,
 	}, nil
 }
 
-func Close(sdb *SQLite) error {
-	db, err := sdb.Client.DB()
+func Close(sqLite *SQLite) error {
+	session, err := sqLite.Session.DB()
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -39,7 +39,7 @@ func Close(sdb *SQLite) error {
 		})
 	}
 
-	err = db.Close()
+	err = session.Close()
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{

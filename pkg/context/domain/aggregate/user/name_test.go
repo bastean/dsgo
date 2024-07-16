@@ -17,11 +17,11 @@ func (suite *NameValueObjectTestSuite) SetupTest() {}
 func (suite *NameValueObjectTestSuite) TestWithInvalidLength() {
 	value, err := user.NameWithInvalidLength()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewName",
 		What:  "name must be between " + "2" + " to " + "20" + " characters and be alphanumeric only",
@@ -36,11 +36,11 @@ func (suite *NameValueObjectTestSuite) TestWithInvalidLength() {
 func (suite *NameValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 	value, err := user.NameWithInvalidAlphanumeric()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewName",
 		What:  "name must be between " + "2" + " to " + "20" + " characters and be alphanumeric only",

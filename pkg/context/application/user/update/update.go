@@ -3,21 +3,22 @@ package update
 import (
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/dsgo/pkg/context/domain/errors"
-	"github.com/bastean/dsgo/pkg/context/domain/model"
+	"github.com/bastean/dsgo/pkg/context/domain/repository"
+	"github.com/bastean/dsgo/pkg/context/domain/usecase"
 )
 
 type Update struct {
-	Repository model.UserRepository
+	repository.User
 }
 
 func (update *Update) Run(primitive *user.Primitive) error {
-	user, err := user.New(primitive)
+	new, err := user.New(primitive)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = update.Repository.Update(user)
+	err = update.User.Update(new)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
@@ -26,8 +27,8 @@ func (update *Update) Run(primitive *user.Primitive) error {
 	return nil
 }
 
-func New(repository model.UserRepository) *Update {
+func New(repository repository.User) usecase.Update {
 	return &Update{
-		Repository: repository,
+		User: repository,
 	}
 }

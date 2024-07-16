@@ -5,22 +5,23 @@ import (
 
 	"github.com/bastean/dsgo/pkg/context/application/user/create"
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
+	"github.com/bastean/dsgo/pkg/context/domain/usecase"
 	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
-type CreateUseCaseTestSuite struct {
+type CreateTestSuite struct {
 	suite.Suite
-	sut        *create.Create
-	repository *persistence.UserRepositoryMock
+	sut        usecase.Create
+	repository *persistence.UserMock
 }
 
-func (suite *CreateUseCaseTestSuite) SetupTest() {
-	suite.repository = new(persistence.UserRepositoryMock)
+func (suite *CreateTestSuite) SetupTest() {
+	suite.repository = new(persistence.UserMock)
 	suite.sut = create.New(suite.repository)
 }
 
-func (suite *CreateUseCaseTestSuite) TestCreate() {
+func (suite *CreateTestSuite) TestCreate() {
 	user := user.Random()
 
 	primitive := user.ToPrimitives()
@@ -34,6 +35,6 @@ func (suite *CreateUseCaseTestSuite) TestCreate() {
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func TestUnitCreateUseCaseSuite(t *testing.T) {
-	suite.Run(t, new(CreateUseCaseTestSuite))
+func TestUnitCreateSuite(t *testing.T) {
+	suite.Run(t, new(CreateTestSuite))
 }

@@ -3,27 +3,27 @@ package mysql
 import (
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/dsgo/pkg/context/domain/errors"
-	"github.com/bastean/dsgo/pkg/context/domain/model"
+	"github.com/bastean/dsgo/pkg/context/domain/repository"
 	"gorm.io/gorm"
 )
 
-type User struct {
+type UserModel struct {
 	gorm.Model
 	Name string `gorm:"index:idx_name,unique"`
 	Role string
 }
 
-type UserTable struct {
+type User struct {
 	table *gorm.DB
 }
 
-func (db *UserTable) Save(user *user.User) error {
-	newUser := &User{
+func (mySQL *User) Save(user *user.User) error {
+	new := &UserModel{
 		Name: user.Name.Value,
 		Role: user.Role.Value,
 	}
 
-	result := db.table.Create(newUser)
+	result := mySQL.table.Create(new)
 
 	switch {
 	case errors.Is(result.Error, gorm.ErrDuplicatedKey):
@@ -46,8 +46,8 @@ func (db *UserTable) Save(user *user.User) error {
 	return nil
 }
 
-func (db *UserTable) Update(user *user.User) error {
-	result := db.table.Where(&User{Name: user.Name.Value}).Updates(user.ToPrimitives())
+func (mySQL *User) Update(user *user.User) error {
+	result := mySQL.table.Where(&UserModel{Name: user.Name.Value}).Updates(user.ToPrimitives())
 
 	if result.Error != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -63,8 +63,8 @@ func (db *UserTable) Update(user *user.User) error {
 	return nil
 }
 
-func (db *UserTable) Delete(name *user.Name) error {
-	result := db.table.Where(&User{Name: name.Value}).Delete(&User{})
+func (mySQL *User) Delete(name *user.Name) error {
+	result := mySQL.table.Where(&UserModel{Name: name.Value}).Delete(&UserModel{})
 
 	if result.Error != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -80,10 +80,10 @@ func (db *UserTable) Delete(name *user.Name) error {
 	return nil
 }
 
-func (db *UserTable) Search(name *user.Name) (*user.User, error) {
+func (mySQL *User) Search(name *user.Name) (*user.User, error) {
 	primitive := new(user.Primitive)
 
-	result := db.table.Where(&User{Name: name.Value}).Scan(&primitive)
+	result := mySQL.table.Where(&UserModel{Name: name.Value}).Scan(&primitive)
 
 	switch {
 	case errors.Is(result.Error, gorm.ErrRecordNotFound):
@@ -123,18 +123,18 @@ func (db *UserTable) Search(name *user.Name) (*user.User, error) {
 	return user, nil
 }
 
-func NewUserTable(db *MySQL) (model.UserRepository, error) {
-	err := db.Client.AutoMigrate(&User{})
+func UserTable(mySQL *MySQL) (repository.User, error) {
+	err := mySQL.Session.AutoMigrate(&UserModel{})
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewUserTable",
+			Where: "UserTable",
 			What:  "failure to run auto migration for user model",
 			Who:   err,
 		})
 	}
 
-	return &UserTable{
-		table: db.Client.Model(&User{}),
+	return &User{
+		table: mySQL.Session.Model(&UserModel{}),
 	}, nil
 }

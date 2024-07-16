@@ -144,7 +144,7 @@ test-integration: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log'
 
 test-acceptance-sync: 
-	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./pkg/cmd/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
+	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
 
 test-acceptance: test-clean
 	TEST_SYNC="$(MAKE) test-acceptance-sync" $(MAKE) test-sync
@@ -202,7 +202,7 @@ WARNING-git-forget:
 	git add .
 
 WARNING-git-genesis:
-	git clean -e .env*-fdx
+	git clean -e .env* -fdx
 	${git-reset-hard}
 	$(MAKE) init
 
@@ -226,13 +226,13 @@ compose-test-down:
 	docker volume rm -f dsgo-database-mongo-test dsgo-database-mysql-test
 
 compose-test-integration: compose-test-down
-	${compose-env} .env.test --env-file .env.demo.test.integration up --exit-code-from server
+	${compose-env} .env.test --env-file .env.test.integration up --exit-code-from dsgo
 
 compose-test-acceptance: compose-test-down
-	${compose-env} .env.test --env-file .env.demo.test.acceptance up --exit-code-from server
+	${compose-env} .env.test --env-file .env.test.acceptance up --exit-code-from dsgo
 
 compose-tests: compose-test-down
-	${compose-env} .env.test up --exit-code-from server
+	${compose-env} .env.test up --exit-code-from dsgo
 
 compose-prod-down:
 	${compose-env} .env.prod down
