@@ -64,7 +64,7 @@ func (sqLite *User) Update(user *user.User) error {
 }
 
 func (sqLite *User) Delete(name *user.Name) error {
-	result := sqLite.table.Where(&UserModel{Name: name.Value}).Delete(&UserModel{})
+	result := sqLite.table.Where(&UserModel{Name: name.Value}).Unscoped().Delete(&UserModel{})
 
 	if result.Error != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -83,7 +83,7 @@ func (sqLite *User) Delete(name *user.Name) error {
 func (sqLite *User) Search(name *user.Name) (*user.User, error) {
 	primitive := new(user.Primitive)
 
-	result := sqLite.table.Where(&UserModel{Name: name.Value}).Scan(&primitive)
+	result := sqLite.table.Where(&UserModel{Name: name.Value}).First(&primitive)
 
 	switch {
 	case errors.Is(result.Error, gorm.ErrRecordNotFound):
@@ -135,6 +135,6 @@ func UserTable(sqLite *SQLite) (repository.User, error) {
 	}
 
 	return &User{
-		table: sqLite.Session.Model(&UserModel{}),
+		table: sqLite.Session.Model(&UserModel{}).Session(&gorm.Session{}),
 	}, nil
 }

@@ -18,6 +18,12 @@ func (update *Update) Run(primitive *user.Primitive) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
+	_, err = update.User.Search(new.Name)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
+	}
+
 	err = update.User.Update(new)
 
 	if err != nil {

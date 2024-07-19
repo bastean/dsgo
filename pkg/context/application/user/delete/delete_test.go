@@ -26,13 +26,13 @@ func (suite *DeleteTestSuite) TestDelete() {
 
 	suite.repository.On("Delete", user.Name)
 
-	err := suite.sut.Run(user.Name)
+	err := suite.sut.Run(user.Name.Value)
 
 	suite.NoError(err)
 
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func TestUnitDeleteUseCaseSuite(t *testing.T) {
+func TestUnitDeleteSuite(t *testing.T) {
 	suite.Run(t, new(DeleteTestSuite))
 }

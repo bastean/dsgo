@@ -10,18 +10,18 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type UpdateUseCaseTestSuite struct {
+type UpdateTestSuite struct {
 	suite.Suite
 	sut        usecase.Update
 	repository *persistence.UserMock
 }
 
-func (suite *UpdateUseCaseTestSuite) SetupTest() {
+func (suite *UpdateTestSuite) SetupTest() {
 	suite.repository = new(persistence.UserMock)
 	suite.sut = update.New(suite.repository)
 }
 
-func (suite *UpdateUseCaseTestSuite) TestUpdate() {
+func (suite *UpdateTestSuite) TestUpdate() {
 	user := user.Random()
 
 	primitive := user.ToPrimitives()
@@ -35,6 +35,6 @@ func (suite *UpdateUseCaseTestSuite) TestUpdate() {
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func TestUnitUpdateUseCaseSuite(t *testing.T) {
-	suite.Run(t, new(UpdateUseCaseTestSuite))
+func TestUnitUpdateSuite(t *testing.T) {
+	suite.Run(t, new(UpdateTestSuite))
 }

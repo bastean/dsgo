@@ -5,8 +5,13 @@ import (
 	"github.com/bastean/dsgo/pkg/context/application/user/delete"
 	"github.com/bastean/dsgo/pkg/context/application/user/read"
 	"github.com/bastean/dsgo/pkg/context/application/user/update"
+	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/dsgo/pkg/context/domain/repository"
 	"github.com/bastean/dsgo/pkg/context/domain/usecase"
+)
+
+type (
+	Primitive = user.Primitive
 )
 
 var (

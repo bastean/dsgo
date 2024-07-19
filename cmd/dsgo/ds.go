@@ -18,7 +18,7 @@ import (
 
 const cli = "dsgo"
 
-var ServerPort string
+var Port string
 
 var AppId, BotToken, TestGuildId string
 
@@ -43,13 +43,13 @@ func usage() {
 }
 
 func main() {
-	flag.StringVar(&ServerPort, "port", env.Server.Port, "Gin Server Port")
+	flag.StringVar(&Port, "port", env.Server.Gin.Port, "Gin Server Port")
 
-	flag.StringVar(&AppId, "app", env.Discord.AppId, "Discord App Id Token")
+	flag.StringVar(&AppId, "app", env.Bot.Discord.AppId, "Discord App Id Token")
 
-	flag.StringVar(&BotToken, "token", env.Discord.BotToken, "Discord Bot Token")
+	flag.StringVar(&BotToken, "token", env.Bot.Discord.BotToken, "Discord Bot Token")
 
-	flag.StringVar(&TestGuildId, "guild", env.Discord.TestGuildId, "Discord Test Guild Id")
+	flag.StringVar(&TestGuildId, "guild", env.Bot.Discord.TestGuildId, "Discord Test Guild Id")
 
 	flag.Usage = usage
 
@@ -68,7 +68,7 @@ func main() {
 	log.Starting(Server.Gin)
 
 	go func() {
-		log.Info("server:gin listening on :" + ServerPort)
+		log.Info("server:gin listening on :" + Port)
 	}()
 
 	log.Started(Server.Gin)

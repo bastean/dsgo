@@ -11,8 +11,22 @@ type Delete struct {
 	repository.User
 }
 
-func (delete *Delete) Run(name *user.Name) error {
-	if err := delete.User.Delete(name); err != nil {
+func (delete *Delete) Run(name string) error {
+	nameVO, err := user.NewName(name)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
+	}
+
+	user, err := delete.User.Search(nameVO)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
+	}
+
+	err = delete.User.Delete(user.Name)
+
+	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 

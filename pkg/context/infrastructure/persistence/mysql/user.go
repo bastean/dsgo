@@ -64,7 +64,7 @@ func (mySQL *User) Update(user *user.User) error {
 }
 
 func (mySQL *User) Delete(name *user.Name) error {
-	result := mySQL.table.Where(&UserModel{Name: name.Value}).Delete(&UserModel{})
+	result := mySQL.table.Where(&UserModel{Name: name.Value}).Unscoped().Delete(&UserModel{})
 
 	if result.Error != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -83,7 +83,7 @@ func (mySQL *User) Delete(name *user.Name) error {
 func (mySQL *User) Search(name *user.Name) (*user.User, error) {
 	primitive := new(user.Primitive)
 
-	result := mySQL.table.Where(&UserModel{Name: name.Value}).Scan(&primitive)
+	result := mySQL.table.Where(&UserModel{Name: name.Value}).First(&primitive)
 
 	switch {
 	case errors.Is(result.Error, gorm.ErrRecordNotFound):
@@ -135,6 +135,6 @@ func UserTable(mySQL *MySQL) (repository.User, error) {
 	}
 
 	return &User{
-		table: mySQL.Session.Model(&UserModel{}),
+		table: mySQL.Session.Model(&UserModel{}).Session(&gorm.Session{}),
 	}, nil
 }

@@ -11,8 +11,14 @@ type Read struct {
 	repository.User
 }
 
-func (read *Read) Run(name *user.Name) (*user.Primitive, error) {
-	user, err := read.User.Search(name)
+func (read *Read) Run(name string) (*user.Primitive, error) {
+	nameVO, err := user.NewName(name)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "Run")
+	}
+
+	user, err := read.User.Search(nameVO)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")

@@ -9,12 +9,12 @@ type (
 		Run(*user.Primitive) error
 	}
 	Read interface {
-		Run(*user.Name) (*user.Primitive, error)
+		Run(name string) (*user.Primitive, error)
 	}
 	Update interface {
 		Run(*user.Primitive) error
 	}
 	Delete interface {
-		Run(*user.Name) error
+		Run(name string) error
 	}
 )

@@ -32,8 +32,8 @@ var (
 
 func OpenMySQL() error {
 	MySQL, err = mysql.Open(
-		env.MySQL.DSN,
-		env.MySQL.Name,
+		env.Database.MySQL.DSN,
+		env.Database.MySQL.Name,
 	)
 
 	if err != nil {
@@ -45,7 +45,7 @@ func OpenMySQL() error {
 
 func OpenSQLite() error {
 	SQLite, err = sqlite.Open(
-		env.SQLite.Name,
+		env.Database.SQLite.Name,
 	)
 
 	if err != nil {

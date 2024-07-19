@@ -28,7 +28,7 @@ func (suite *ReadTestSuite) TestRead() {
 
 	expected := user.ToPrimitives()
 
-	actual, err := suite.sut.Run(user.Name)
+	actual, err := suite.sut.Run(user.Name.Value)
 
 	suite.NoError(err)
 

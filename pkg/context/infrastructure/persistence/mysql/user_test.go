@@ -27,11 +27,18 @@ func (suite *UserTestSuite) SetupTest() {
 }
 
 func (suite *UserTestSuite) TestSave() {
-	user := user.Random()
-	suite.NoError(suite.sut.Save(user))
+	expected := user.Random()
+
+	suite.NoError(suite.sut.Save(expected))
+
+	actual, err := suite.sut.Search(expected.Name)
+
+	suite.NoError(err)
+
+	suite.Equal(expected, actual)
 }
 
-func (suite *UserTestSuite) TestSaveDuplicate() {
+func (suite *UserTestSuite) TestSaveErrDuplicatedKey() {
 	user := user.Random()
 
 	suite.NoError(suite.sut.Save(user))
@@ -53,19 +60,31 @@ func (suite *UserTestSuite) TestSaveDuplicate() {
 }
 
 func (suite *UserTestSuite) TestUpdate() {
-	user := user.Random()
+	expected := user.Random()
 
-	suite.NoError(suite.sut.Save(user))
+	suite.NoError(suite.sut.Save(expected))
 
-	suite.NoError(suite.sut.Update(user))
+	expected.Role = user.RoleWithValidValue()
+
+	suite.NoError(suite.sut.Update(expected))
+
+	actual, err := suite.sut.Search(expected.Name)
+
+	suite.NoError(err)
+
+	suite.Equal(expected, actual)
 }
 
 func (suite *UserTestSuite) TestDelete() {
-	user := user.Random()
+	random := user.Random()
 
-	suite.NoError(suite.sut.Save(user))
+	suite.NoError(suite.sut.Save(random))
 
-	suite.NoError(suite.sut.Delete(user.Name))
+	suite.NoError(suite.sut.Delete(random.Name))
+
+	_, err := suite.sut.Search(random.Name)
+
+	suite.Error(err)
 }
 
 func (suite *UserTestSuite) TestSearch() {
@@ -78,6 +97,28 @@ func (suite *UserTestSuite) TestSearch() {
 	suite.NoError(err)
 
 	suite.Equal(expected, actual)
+}
+
+func (suite *UserTestSuite) TestSearchErrRecordNotFound() {
+	random := user.Random()
+
+	_, err := suite.sut.Search(random.Name)
+
+	var actual *errors.ErrNotExist
+
+	suite.ErrorAs(err, &actual)
+
+	expected := &errors.ErrNotExist{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "Search",
+		What:  "not found",
+		Why: errors.Meta{
+			"Index": random.Name.Value,
+		},
+		Who: actual.Who,
+	}}
+
+	suite.EqualError(expected, actual.Error())
 }
 
 func TestIntegrationUserSuite(t *testing.T) {
