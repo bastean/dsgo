@@ -1,0 +1,97 @@
+package home
+
+var UpdateFormTagId = "update"
+
+script UpdateFormInit(formTagId string) {
+    $(`#${formTagId}`)
+        .form({
+            on: "blur",
+            inline : true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+            fields: {
+                Name: {
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
+                        }
+                    ]
+                },
+                Role: {
+                    rules: [
+                        {
+                            type   : "exactCount[1]",
+                            prompt : "Select a role"
+                        },
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "update user", 
+            method: "PATCH",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: "success",
+                    message: response.message,
+                    showProgress: "top",
+                });
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: "error",
+                    message: response.message,
+                    showProgress: "top"
+                });
+            }
+        })
+    ;
+}
+
+templ UpdateForm() {
+	<form id={ UpdateFormTagId } class="ui inverted form">
+		<h1 class="ui dividing inverted header">
+			Update an existing user
+		</h1>
+		<div class="required field">
+			<label>Name</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Name" name="Name"/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Role</label>
+			<div class="ui inverted search clearable selection dropdown" id="Role">
+				<input type="hidden" name="Role"/>
+				<i class="dropdown icon"></i>
+				<div class="default text">Select</div>
+				<div class="menu">
+					<div class="item" data-value="administrator"><i class="user shield icon"></i>Administrator</div>
+					<div class="item" data-value="moderator"><i class="users icon"></i>Moderator</div>
+					<div class="item" data-value="contributor"><i class="people carry icon"></i>Contributor</div>
+				</div>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui middle aligned center aligned grid">
+			<div class="column">
+				<button class="ui vertical animated fluid primary submit button">
+					<div class="hidden content"><i class="sync icon"></i></div>
+					<div class="visible content">
+						Update
+					</div>
+				</button>
+			</div>
+		</div>
+	</form>
+	@UpdateFormInit(UpdateFormTagId)
+}

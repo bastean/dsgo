@@ -4,6 +4,7 @@
 
 #*______URL______
 
+server = http://127.0.0.1:8080
 github = https://github.com/bastean/dsgo
 
 #*______Go______
@@ -74,6 +75,7 @@ copy-deps:
 
 generate-required:
 	go generate ./...
+	find . -name "*_templ.go" -type f -delete
 	templ generate
 
 #*______Initializations______
@@ -132,10 +134,10 @@ test-clean: generate-required
 	cd test/ && mkdir -p report
 
 test-codegen:
-	${npx} playwright codegen http://localhost:8080
+	${npx} playwright codegen ${server}
 
 test-sync: upgrade-go
-	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l http-get://localhost:8080 && $(TEST_SYNC)'
+	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l ${server} && $(TEST_SYNC)'
 
 test-unit: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log'
@@ -144,13 +146,13 @@ test-integration: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log'
 
 test-acceptance-sync: 
-	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
+	${bash} 'TEST_URL="${server}" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
 
 test-acceptance: test-clean
 	TEST_SYNC="$(MAKE) test-acceptance-sync" $(MAKE) test-sync
 
 tests-sync:
-	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./... |& tee test/report/report.log'
+	${bash} 'TEST_URL="${server}" go test -v -cover ./... |& tee test/report/report.log'
 
 tests: test-clean
 	TEST_SYNC="$(MAKE) tests-sync" $(MAKE) test-sync
@@ -262,4 +264,4 @@ WARNING-docker-prune-hard:
 
 fix-local-playwright:
 	go get -u github.com/playwright-community/playwright-go
-	go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
+	npx playwright install chromium --with-deps

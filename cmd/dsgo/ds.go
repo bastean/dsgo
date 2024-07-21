@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/bastean/dsgo/internal/app/bot"
+	"github.com/bastean/dsgo/internal/app/server"
 	"github.com/bastean/dsgo/internal/pkg/service"
 	"github.com/bastean/dsgo/internal/pkg/service/env"
 	"github.com/bastean/dsgo/internal/pkg/service/logger/log"
@@ -26,9 +27,9 @@ var (
 	Services = "services"
 	Apps     = "apps"
 	Server   = &struct {
-		Gin string
+		Fiber string
 	}{
-		Gin: log.Server("gin"),
+		Fiber: log.Server("fiber"),
 	}
 	Bot = &struct {
 		Discord string
@@ -43,7 +44,9 @@ func usage() {
 }
 
 func main() {
-	flag.StringVar(&Port, "port", env.Server.Gin.Port, "Gin Server Port")
+	log.Info("dsGO v0.0.1-alpha.0")
+
+	flag.StringVar(&Port, "port", env.Server.Fiber.Port, "Fiber Server Port")
 
 	flag.StringVar(&AppId, "app", env.Bot.Discord.AppId, "Discord App Id Token")
 
@@ -65,13 +68,21 @@ func main() {
 
 	log.Starting(Apps)
 
-	log.Starting(Server.Gin)
+	log.Starting(Server.Fiber)
 
 	go func() {
-		log.Info("server:gin listening on :" + Port)
+		if err := server.Run(Port); err != nil {
+			log.Fatal(err.Error())
+		}
 	}()
 
-	log.Started(Server.Gin)
+	log.Started(Server.Fiber)
+
+	log.Info(fmt.Sprintf("%s listening on :%s", Server.Fiber, Port))
+
+	if proxy, ok := env.Server.HasProxy(); ok {
+		log.Info(fmt.Sprintf("%s proxy listening on :%s", Server.Fiber, proxy))
+	}
 
 	log.Starting(Bot.Discord)
 
@@ -99,6 +110,12 @@ func main() {
 
 	log.Stopping(Apps)
 
+	log.Stopping(Server.Fiber)
+
+	errServer := server.Stop(ctx)
+
+	log.Stopped(Server.Fiber)
+
 	log.Stopping(Bot.Discord)
 
 	errBot := bot.Stop()
@@ -113,7 +130,7 @@ func main() {
 
 	log.Stopped(Services)
 
-	if err := errors.Join(errBot, errService); err != nil {
+	if err := errors.Join(errServer, errBot, errService); err != nil {
 		log.Error(err.Error())
 	}
 

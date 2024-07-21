@@ -1,0 +1,115 @@
+package home
+
+var CreateFormTagId = "create"
+
+script CreateFormInit(formTagId string) {
+    $(`#${formTagId}`)
+        .form({
+            on: "blur",
+            inline : true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+            fields: {
+                Name: {
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
+                        }
+                    ]
+                },
+                Role: {
+                    rules: [
+                        {
+                            type   : "exactCount[1]",
+                            prompt : "Select a role"
+                        },
+                    ]
+                },
+                Terms: {
+                    rules: [
+                        {
+                            type: "checked",
+                            prompt: "Terms & Conditions must be checked"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "create user", 
+            method: "PUT",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: "success",
+                    message: response.message,
+                    showProgress: "top",
+                });
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: "error",
+                    message: response.message,
+                    showProgress: "top"
+                });
+            }
+        })
+    ;
+}
+
+script ShowTerms(modalTagId string) {
+    $(`#${modalTagId}`).modal("show")
+}
+
+templ CreateForm() {
+	<form id={ CreateFormTagId } class="ui inverted form">
+		<h1 class="ui dividing inverted header">
+			Create a new user
+		</h1>
+		<div class="required field">
+			<label>Name</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Name" name="Name"/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Role</label>
+			<div class="ui inverted search clearable selection dropdown" id="Role">
+				<input type="hidden" name="Role"/>
+				<i class="dropdown icon"></i>
+				<div class="default text">Select</div>
+				<div class="menu">
+					<div class="item" data-value="administrator"><i class="user shield icon"></i>Administrator</div>
+					<div class="item" data-value="moderator"><i class="users icon"></i>Moderator</div>
+					<div class="item" data-value="contributor"><i class="people carry icon"></i>Contributor</div>
+				</div>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui middle aligned center aligned grid">
+			<div class="column">
+				<div class="inline required field">
+					<div class="ui inverted checkbox">
+						<input type="checkbox" name="Terms"/>
+						<label style="cursor: pointer;" onclick={ ShowTerms(TermsModalTagId) }>I agree to the <a><b>terms and conditions</b></a></label>
+					</div>
+				</div>
+				<button class="ui vertical animated fluid primary submit button">
+					<div class="hidden content"><i class="upload icon"></i></div>
+					<div class="visible content">
+						Create
+					</div>
+				</button>
+			</div>
+		</div>
+	</form>
+	@CreateFormInit(CreateFormTagId)
+}

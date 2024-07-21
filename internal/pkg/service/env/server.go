@@ -4,19 +4,14 @@ import (
 	"os"
 )
 
-type Security struct {
-	AllowedHosts string
+type Fiber struct {
+	URL, Port string
 }
 
-type Gin struct {
-	URL, Port, Mode string
-	Security        *Security
-}
-
-func (gin *Gin) HasProxy() (string, bool) {
+func (fiber *Fiber) HasProxy() (string, bool) {
 	proxy := os.Getenv("DSGO_DEV_AIR_PROXY_PORT")
 
-	if proxy != "" && proxy != gin.Port {
+	if proxy != "" && proxy != fiber.Port {
 		return proxy, true
 	}
 
@@ -24,14 +19,10 @@ func (gin *Gin) HasProxy() (string, bool) {
 }
 
 var Server = &struct {
-	*Gin
+	*Fiber
 }{
-	Gin: &Gin{
-		URL:  os.Getenv("DSGO_SERVER_GIN_URL"),
-		Port: os.Getenv("DSGO_SERVER_GIN_PORT"),
-		Mode: os.Getenv("DSGO_SERVER_GIN_MODE"),
-		Security: &Security{
-			AllowedHosts: os.Getenv("DSGO_SERVER_GIN_ALLOWED_HOSTS"),
-		},
+	Fiber: &Fiber{
+		URL:  os.Getenv("DSGO_SERVER_FIBER_URL"),
+		Port: os.Getenv("DSGO_SERVER_FIBER_PORT"),
 	},
 }

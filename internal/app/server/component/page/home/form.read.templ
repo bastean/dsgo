@@ -1,0 +1,84 @@
+package home
+
+var ReadFormTagId = "read"
+
+script ReadFormInit(formTagId string) {
+    $(`#${formTagId}`)
+        .form({
+            on: "blur",
+            inline : true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+            fields: {
+                Name: {
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
+                        }
+                    ]
+                },
+            }
+        })
+        .api({
+            action: "read user", 
+            method: "POST",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: "info",
+                    displayTime: 0,
+                    closeIcon: true,
+                    title: response.message,
+                    message: `
+                    <div class="ui divider"></div>
+                    <div class="ui animated bulleted list">
+                        <div class="item"><b>Name:</b> ${response.data.name}</div>
+                        <div class="item"><b>Role:</b> ${response.data.role}</div>
+                    </div>
+                    `
+                });
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: "error",
+                    message: response.message,
+                    showProgress: "top"
+                });
+            }
+        })
+    ;
+}
+
+templ ReadForm() {
+	<form id={ ReadFormTagId } class="ui inverted form">
+		<h1 class="ui dividing inverted header">
+			Read an existing user
+		</h1>
+		<div class="required field">
+			<label>Name</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Name" name="Name"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui middle aligned center aligned grid">
+			<div class="column">
+				<button class="ui vertical animated fluid primary submit button">
+					<div class="hidden content"><i class="search icon"></i></div>
+					<div class="visible content">
+						Read
+					</div>
+				</button>
+			</div>
+		</div>
+	</form>
+	@ReadFormInit(ReadFormTagId)
+}

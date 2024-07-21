@@ -1,0 +1,76 @@
+package home
+
+var DeleteFormTagId = "delete"
+
+script DeleteFormInit(formTagId string) {
+    $(`#${formTagId}`)
+        .form({
+            on: "blur",
+            inline : true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+            fields: {
+                Name: {
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
+                        }
+                    ]
+                },
+            }
+        })
+        .api({
+            action: "delete user", 
+            method: "DELETE",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: "success",
+                    message: response.message,
+                    showProgress: "top",
+                });
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: "error",
+                    message: response.message,
+                    showProgress: "top"
+                });
+            }
+        })
+    ;
+}
+
+templ DeleteForm() {
+	<form id={ DeleteFormTagId } class="ui inverted form">
+		<h1 class="ui dividing inverted header">
+			Delete an existing user
+		</h1>
+		<div class="required field">
+			<label>Name</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Name" name="Name"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui middle aligned center aligned grid">
+			<div class="column">
+				<button class="ui vertical animated fluid primary submit red button">
+					<div class="hidden content"><i class="trash icon"></i></div>
+					<div class="visible content">
+						Delete
+					</div>
+				</button>
+			</div>
+		</div>
+	</form>
+	@DeleteFormInit(DeleteFormTagId)
+}
