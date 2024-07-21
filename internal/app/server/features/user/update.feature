@@ -7,7 +7,7 @@ Feature: Update an existing user
     * I select the Role in Administrator
     * I check the I agree to the terms and conditions
     * I click the Create button
-    And I see user created notification
+    And I see Created notification
 
   Scenario: Update already existing user
     Given I am on / page
@@ -15,4 +15,4 @@ Feature: Update an existing user
     * I fill the Name with update
     * I select the Role in Contributor
     * I click the Update button
-    But I see user updated notification
+    But I see Updated notification

@@ -55,14 +55,28 @@ upgrade-reset:
 upgrade:
 	go run ./scripts/upgrade
 
-#*______Dependencies______
+#*______Tools______
 
-install-tools:
+scan-tools:
 	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 	curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.52.2
 	go install github.com/google/osv-scanner/cmd/osv-scanner@latest
+
+lint-tools:
 	go install honnef.co/go/tools/cmd/staticcheck@latest
+
+dev-tools:
+	go install github.com/air-verse/air@latest
 	go install github.com/a-h/templ/cmd/templ@latest
+	npm i -g prettier
+
+test-tools:
+	go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
+	npm i -g concurrently wait-on
+
+install-tools: scan-tools lint-tools dev-tools test-tools
+
+#*______Dependencies______
 
 install-deps:
 	go mod download
@@ -136,7 +150,7 @@ test-clean: generate-required
 test-codegen:
 	${npx} playwright codegen ${server}
 
-test-sync: upgrade-go
+test-sync:
 	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l ${server} && $(TEST_SYNC)'
 
 test-unit: test-clean
@@ -218,14 +232,14 @@ docker-it:
 
 compose-dev-down:
 	${compose-env} .env.dev down
-	docker volume rm -f dsgo-database-mongo-dev dsgo-database-mysql-dev
+	docker volume rm -f dsgo-database-mysql-dev
 
 compose-dev: compose-dev-down
 	${compose-env} .env.dev up
 
 compose-test-down:
 	${compose-env} .env.test down
-	docker volume rm -f dsgo-database-mongo-test dsgo-database-mysql-test
+	docker volume rm -f dsgo-database-mysql-test
 
 compose-test-integration: compose-test-down
 	${compose-env} .env.test --env-file .env.test.integration up --exit-code-from dsgo
@@ -262,6 +276,4 @@ WARNING-docker-prune-hard:
 
 #*______Fixes______
 
-fix-local-playwright:
-	go get -u github.com/playwright-community/playwright-go
-	npx playwright install chromium --with-deps
+fix-playwright: upgrade-go tools-test
