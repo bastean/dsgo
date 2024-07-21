@@ -26,7 +26,7 @@ func NewName(value string) (*Name, error) {
 	if err != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewName",
-			What:  "name must be between " + NameMinCharactersLength + " to " + NameMaxCharactersLength + " characters and be alphanumeric only",
+			What:  "Name must be between " + NameMinCharactersLength + " to " + NameMaxCharactersLength + " characters and be alphanumeric only",
 			Why: errors.Meta{
 				"Name": value,
 			},

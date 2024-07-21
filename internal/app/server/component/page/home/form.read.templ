@@ -44,6 +44,10 @@ script ReadFormInit(formTagId string) {
                     </div>
                     `
                 });
+
+                _.delay(function() {
+                    $(`#${formTagId}`).form("reset");
+                }, 1000);
             },
             onFailure: function(response, element, xhr) {
                 $.toast({
@@ -58,9 +62,6 @@ script ReadFormInit(formTagId string) {
 
 templ ReadForm() {
 	<form id={ ReadFormTagId } class="ui inverted form">
-		<h1 class="ui dividing inverted header">
-			Read an existing user
-		</h1>
 		<div class="required field">
 			<label>Name</label>
 			<div class="ui inverted transparent left icon input">

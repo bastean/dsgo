@@ -23,7 +23,7 @@ func Create() fiber.Handler {
 			return errors.BubbleUp(err, "Create")
 		}
 
-		err = c.Status(fiber.StatusCreated).JSON(reply.JSON(true, "user created", reply.Payload{}))
+		err = c.Status(fiber.StatusCreated).JSON(reply.JSON(true, "Created", reply.Payload{}))
 
 		if err != nil {
 			return errors.BubbleUp(err, "Create")

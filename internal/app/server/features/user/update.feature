@@ -1,6 +1,6 @@
 Feature: Update an existing user
 
-  Scenario: Create a valid non existing account
+  Scenario: Create a valid non existing user
     Given I am on / page
     Then I click the Create tab
     * I fill the Name with update
@@ -9,7 +9,7 @@ Feature: Update an existing user
     * I click the Create button
     And I see user created notification
 
-  Scenario: Create already existing account
+  Scenario: Update already existing user
     Given I am on / page
     Then I click the Update tab
     * I fill the Name with update

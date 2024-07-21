@@ -23,7 +23,7 @@ func Open(dsn, name string) (*MySQL, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "NewMySQLDatabase",
-			What:  "failure connecting to mysql",
+			What:  "Failure connecting to mysql",
 			Who:   err,
 		})
 	}
@@ -39,7 +39,7 @@ func Close(mySQL *MySQL) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "CloseMySQLDatabase",
-			What:  "failure to obtain mysql database",
+			What:  "Failure to obtain mysql database",
 			Who:   err,
 		})
 	}
@@ -49,7 +49,7 @@ func Close(mySQL *MySQL) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "CloseMySQLDatabase",
-			What:  "failure to close connection with mysql",
+			What:  "Failure to close connection with mysql",
 			Who:   err,
 		})
 	}

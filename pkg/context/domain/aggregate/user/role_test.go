@@ -24,7 +24,7 @@ func (suite *RoleValueObjectTestSuite) TestWithInvalidValue() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewRole",
-		What:  "role must be only one of these values: administrator, moderator, contributor",
+		What:  "Role must be only one of these values: Administrator, Moderator, Contributor",
 		Why: errors.Meta{
 			"Role": value,
 		},

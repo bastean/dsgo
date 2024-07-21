@@ -13,7 +13,7 @@ func InteractionCreate(session *discordgo.Session, event *discordgo.InteractionC
 	response, err := command.Routing[request.Name](request.Options)
 
 	if err != nil {
-		response = middleware.ErrorHandler(err)
+		response = middleware.Error(err)
 	}
 
 	err = session.InteractionRespond(event.Interaction, response)

@@ -16,19 +16,19 @@ func Error(c *fiber.Ctx, err error) error {
 
 	switch {
 	case errors.As(err, &errInvalidValue):
-		c.Status(fiber.StatusUnprocessableEntity).JSON(reply.JSON(false, errInvalidValue.What, errInvalidValue.Why))
+		err = c.Status(fiber.StatusUnprocessableEntity).JSON(reply.JSON(false, errInvalidValue.What, errInvalidValue.Why))
 	case errors.As(err, &errAlreadyExist):
-		c.Status(fiber.StatusConflict).JSON(reply.JSON(false, errAlreadyExist.What, errAlreadyExist.Why))
+		err = c.Status(fiber.StatusConflict).JSON(reply.JSON(false, errAlreadyExist.What, errAlreadyExist.Why))
 	case errors.As(err, &errNotExist):
-		c.Status(fiber.StatusNotFound).JSON(reply.JSON(false, errNotExist.What, errNotExist.Why))
+		err = c.Status(fiber.StatusNotFound).JSON(reply.JSON(false, errNotExist.What, errNotExist.Why))
 	case errors.As(err, &errFailure):
-		c.Status(fiber.StatusBadRequest).JSON(reply.JSON(false, errFailure.What, errFailure.Why))
+		err = c.Status(fiber.StatusBadRequest).JSON(reply.JSON(false, errFailure.What, errFailure.Why))
 	case errors.As(err, &errInternal):
-		c.Status(fiber.StatusInternalServerError).JSON(reply.JSON(false, "internal server error", reply.Payload{}))
+		err = c.Status(fiber.StatusInternalServerError).JSON(reply.JSON(false, "internal server error", reply.Payload{}))
 		fallthrough
 	default:
 		log.Error(err.Error())
 	}
 
-	return nil
+	return err
 }

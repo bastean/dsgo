@@ -11,7 +11,7 @@ import (
 var SubCommand = &discordgo.ApplicationCommandOption{
 	Type:        discordgo.ApplicationCommandOptionSubCommand,
 	Name:        "delete",
-	Description: "Delete an existing user",
+	Description: "Delete",
 	Options: []*discordgo.ApplicationCommandOption{
 		{
 			Type:        discordgo.ApplicationCommandOptionString,

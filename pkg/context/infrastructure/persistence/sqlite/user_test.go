@@ -1,6 +1,7 @@
 package sqlite_test
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -58,7 +59,7 @@ func (suite *UserTestSuite) TestSaveErrDuplicatedKey() {
 	expected := &errors.ErrAlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Save",
-		What:  "already registered",
+		What:  fmt.Sprintf("%s already registered", user.Name.Value),
 		Who:   actual.Who,
 	}}
 
@@ -117,7 +118,7 @@ func (suite *UserTestSuite) TestSearchErrRecordNotFound() {
 	expected := &errors.ErrNotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Search",
-		What:  "not found",
+		What:  fmt.Sprintf("%s not found", random.Name.Value),
 		Why: errors.Meta{
 			"Index": random.Name.Value,
 		},

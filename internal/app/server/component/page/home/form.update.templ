@@ -44,6 +44,10 @@ script UpdateFormInit(formTagId string) {
                     message: response.message,
                     showProgress: "top",
                 });
+
+                _.delay(function() {
+                    $(`#${formTagId}`).form("reset");
+                }, 1000);
             },
             onFailure: function(response, element, xhr) {
                 $.toast({
@@ -58,9 +62,6 @@ script UpdateFormInit(formTagId string) {
 
 templ UpdateForm() {
 	<form id={ UpdateFormTagId } class="ui inverted form">
-		<h1 class="ui dividing inverted header">
-			Update an existing user
-		</h1>
 		<div class="required field">
 			<label>Name</label>
 			<div class="ui inverted transparent left icon input">

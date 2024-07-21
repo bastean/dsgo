@@ -25,7 +25,7 @@ func Delete() fiber.Handler {
 			return errors.BubbleUp(err, "Delete")
 		}
 
-		err = c.Status(fiber.StatusCreated).JSON(reply.JSON(true, "user deleted", reply.Payload{}))
+		err = c.Status(fiber.StatusCreated).JSON(reply.JSON(true, "Deleted", reply.Payload{}))
 
 		if err != nil {
 			return errors.BubbleUp(err, "Delete")

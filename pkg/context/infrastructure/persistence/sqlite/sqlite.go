@@ -18,7 +18,7 @@ func Open(filename string) (*SQLite, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "New",
-			What:  "failure connecting to sqlite",
+			What:  "Failure connecting to sqlite",
 			Who:   err,
 		})
 	}
@@ -34,7 +34,7 @@ func Close(sqLite *SQLite) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Close",
-			What:  "failure to obtain sqlite database",
+			What:  "Failure to obtain sqlite database",
 			Who:   err,
 		})
 	}
@@ -44,7 +44,7 @@ func Close(sqLite *SQLite) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Close",
-			What:  "failure to close connection with sqlite",
+			What:  "Failure to close connection with sqlite",
 			Who:   err,
 		})
 	}

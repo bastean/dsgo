@@ -36,6 +36,10 @@ script DeleteFormInit(formTagId string) {
                     message: response.message,
                     showProgress: "top",
                 });
+
+                _.delay(function() {
+                    $(`#${formTagId}`).form("reset");
+                }, 1000);
             },
             onFailure: function(response, element, xhr) {
                 $.toast({
@@ -50,9 +54,6 @@ script DeleteFormInit(formTagId string) {
 
 templ DeleteForm() {
 	<form id={ DeleteFormTagId } class="ui inverted form">
-		<h1 class="ui dividing inverted header">
-			Delete an existing user
-		</h1>
 		<div class="required field">
 			<label>Name</label>
 			<div class="ui inverted transparent left icon input">

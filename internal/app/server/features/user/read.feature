@@ -1,6 +1,6 @@
 Feature: Read an existing user
 
-  Scenario: Create a valid non existing account
+  Scenario: Create a valid non existing user
     Given I am on / page
     Then I click the Create tab
     * I fill the Name with read
@@ -9,7 +9,7 @@ Feature: Read an existing user
     * I click the Create button
     And I see user created notification
 
-  Scenario: Read a valid existing account
+  Scenario: Read a valid existing user
     Given I am on / page
     Then I click the Read tab
     * I fill the Name with read

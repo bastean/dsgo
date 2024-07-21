@@ -1,6 +1,8 @@
 package sqlite
 
 import (
+	"fmt"
+
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/dsgo/pkg/context/domain/errors"
 	"github.com/bastean/dsgo/pkg/context/domain/repository"
@@ -29,13 +31,13 @@ func (sqLite *User) Save(user *user.User) error {
 	case errors.Is(result.Error, gorm.ErrDuplicatedKey):
 		return errors.NewAlreadyExist(&errors.Bubble{
 			Where: "Save",
-			What:  "already registered",
+			What:  fmt.Sprintf("%s already registered", user.Name.Value),
 			Who:   result.Error,
 		})
 	case result.Error != nil:
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Save",
-			What:  "failure to save a user",
+			What:  "Failure to save a user",
 			Why: errors.Meta{
 				"Name": user.Name.Value,
 			},
@@ -52,7 +54,7 @@ func (sqLite *User) Update(user *user.User) error {
 	if result.Error != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Update",
-			What:  "failure to update a user",
+			What:  "Failure to update a user",
 			Why: errors.Meta{
 				"Name": user.Name.Value,
 			},
@@ -69,7 +71,7 @@ func (sqLite *User) Delete(name *user.Name) error {
 	if result.Error != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Delete",
-			What:  "failure to delete a user",
+			What:  "Failure to delete a user",
 			Why: errors.Meta{
 				"Name": name.Value,
 			},
@@ -89,7 +91,7 @@ func (sqLite *User) Search(name *user.Name) (*user.User, error) {
 	case errors.Is(result.Error, gorm.ErrRecordNotFound):
 		return nil, errors.NewNotExist(&errors.Bubble{
 			Where: "Search",
-			What:  "not found",
+			What:  fmt.Sprintf("%s not found", name.Value),
 			Why: errors.Meta{
 				"Index": name.Value,
 			},
@@ -98,7 +100,7 @@ func (sqLite *User) Search(name *user.Name) (*user.User, error) {
 	case result.Error != nil:
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "Search",
-			What:  "failure to search a user",
+			What:  "Failure to search a user",
 			Why: errors.Meta{
 				"Name": name.Value,
 			},
@@ -111,7 +113,7 @@ func (sqLite *User) Search(name *user.Name) (*user.User, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "Search",
-			What:  "failure to create an aggregate from a primitive",
+			What:  "Failure to create an aggregate from a primitive",
 			Why: errors.Meta{
 				"Primitive": primitive,
 				"Index":     name.Value,
@@ -129,7 +131,7 @@ func UserTable(sqLite *SQLite) (repository.User, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "UserTable",
-			What:  "failure to run auto migration for user model",
+			What:  "Failure to run auto migration for user model",
 			Who:   err,
 		})
 	}

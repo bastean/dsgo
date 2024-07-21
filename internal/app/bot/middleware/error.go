@@ -6,7 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func ErrorHandler(err error) *discordgo.InteractionResponse {
+func Error(err error) *discordgo.InteractionResponse {
 	var errInvalidValue *errors.ErrInvalidValue
 	var errAlreadyExist *errors.ErrAlreadyExist
 	var errNotExist *errors.ErrNotExist

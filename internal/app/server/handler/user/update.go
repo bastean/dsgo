@@ -14,19 +14,19 @@ func Update() fiber.Handler {
 		err := c.BodyParser(primitive)
 
 		if err != nil {
-			return errors.BubbleUp(err, "Create")
+			return errors.BubbleUp(err, "Update")
 		}
 
 		err = user.Update.Run(primitive)
 
 		if err != nil {
-			return errors.BubbleUp(err, "Create")
+			return errors.BubbleUp(err, "Update")
 		}
 
-		err = c.Status(fiber.StatusCreated).JSON(reply.JSON(true, "user updated", reply.Payload{}))
+		err = c.Status(fiber.StatusCreated).JSON(reply.JSON(true, "Updated", reply.Payload{}))
 
 		if err != nil {
-			return errors.BubbleUp(err, "Create")
+			return errors.BubbleUp(err, "Update")
 		}
 
 		return nil

@@ -80,7 +80,7 @@ func main() {
 
 	log.Info(fmt.Sprintf("%s listening on :%s", Server.Fiber, Port))
 
-	if proxy, ok := env.Server.HasProxy(); ok {
+	if proxy, ok := env.Server.Fiber.HasProxy(); ok {
 		log.Info(fmt.Sprintf("%s proxy listening on :%s", Server.Fiber, proxy))
 	}
 

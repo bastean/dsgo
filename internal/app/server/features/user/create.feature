@@ -1,6 +1,6 @@
 Feature: Create a new user
 
-  Scenario: Create a valid non existing account
+  Scenario: Create a valid non existing user
     Given I am on / page
     Then I click the Create tab
     * I fill the Name with create
@@ -9,7 +9,7 @@ Feature: Create a new user
     * I click the Create button
     And I see user created notification
 
-  Scenario: Create already existing account
+  Scenario: Create already existing user
     Given I am on / page
     Then I click the Create tab
     * I fill the Name with create

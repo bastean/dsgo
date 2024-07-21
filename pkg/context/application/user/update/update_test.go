@@ -26,6 +26,8 @@ func (suite *UpdateTestSuite) TestUpdate() {
 
 	primitive := user.ToPrimitives()
 
+	suite.repository.On("Search", user.Name).Return(user)
+
 	suite.repository.On("Update", user)
 
 	err := suite.sut.Run(primitive)

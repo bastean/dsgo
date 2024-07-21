@@ -24,6 +24,8 @@ func (suite *DeleteTestSuite) SetupTest() {
 func (suite *DeleteTestSuite) TestDelete() {
 	user := user.Random()
 
+	suite.repository.On("Search", user.Name).Return(user)
+
 	suite.repository.On("Delete", user.Name)
 
 	err := suite.sut.Run(user.Name.Value)

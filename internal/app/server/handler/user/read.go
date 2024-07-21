@@ -25,7 +25,7 @@ func Read() fiber.Handler {
 			return errors.BubbleUp(err, "Read")
 		}
 
-		err = c.Status(fiber.StatusCreated).JSON(reply.JSON(true, "user found", reply.Payload{
+		err = c.Status(fiber.StatusCreated).JSON(reply.JSON(true, "Found", reply.Payload{
 			"name": user.Name,
 			"role": user.Role,
 		}))
