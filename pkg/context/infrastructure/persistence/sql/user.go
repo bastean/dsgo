@@ -1,4 +1,4 @@
-package mysql
+package sql
 
 import (
 	"fmt"
@@ -19,13 +19,13 @@ type User struct {
 	table *gorm.DB
 }
 
-func (mySQL *User) Save(user *user.User) error {
+func (database *User) Save(user *user.User) error {
 	new := &UserModel{
 		Name: user.Name.Value,
 		Role: user.Role.Value,
 	}
 
-	result := mySQL.table.Create(new)
+	result := database.table.Create(new)
 
 	switch {
 	case errors.Is(result.Error, gorm.ErrDuplicatedKey):
@@ -48,8 +48,8 @@ func (mySQL *User) Save(user *user.User) error {
 	return nil
 }
 
-func (mySQL *User) Update(user *user.User) error {
-	result := mySQL.table.Where(&UserModel{Name: user.Name.Value}).Updates(user.ToPrimitives())
+func (database *User) Update(user *user.User) error {
+	result := database.table.Where(&UserModel{Name: user.Name.Value}).Updates(user.ToPrimitives())
 
 	if result.Error != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -65,8 +65,8 @@ func (mySQL *User) Update(user *user.User) error {
 	return nil
 }
 
-func (mySQL *User) Delete(name *user.Name) error {
-	result := mySQL.table.Where(&UserModel{Name: name.Value}).Unscoped().Delete(&UserModel{})
+func (database *User) Delete(name *user.Name) error {
+	result := database.table.Where(&UserModel{Name: name.Value}).Unscoped().Delete(&UserModel{})
 
 	if result.Error != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -82,10 +82,10 @@ func (mySQL *User) Delete(name *user.Name) error {
 	return nil
 }
 
-func (mySQL *User) Search(name *user.Name) (*user.User, error) {
+func (database *User) Search(name *user.Name) (*user.User, error) {
 	primitive := new(user.Primitive)
 
-	result := mySQL.table.Where(&UserModel{Name: name.Value}).First(&primitive)
+	result := database.table.Where(&UserModel{Name: name.Value}).First(&primitive)
 
 	switch {
 	case errors.Is(result.Error, gorm.ErrRecordNotFound):
@@ -125,8 +125,8 @@ func (mySQL *User) Search(name *user.Name) (*user.User, error) {
 	return user, nil
 }
 
-func UserTable(mySQL *MySQL) (repository.User, error) {
-	err := mySQL.Session.AutoMigrate(&UserModel{})
+func UserTable(database *Database) (repository.User, error) {
+	err := database.Session.AutoMigrate(&UserModel{})
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
@@ -137,6 +137,6 @@ func UserTable(mySQL *MySQL) (repository.User, error) {
 	}
 
 	return &User{
-		table: mySQL.Session.Model(&UserModel{}).Session(&gorm.Session{}),
+		table: database.Session.Model(&UserModel{}).Session(&gorm.Session{}),
 	}, nil
 }

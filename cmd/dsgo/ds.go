@@ -19,24 +19,14 @@ import (
 
 const cli = "dsgo"
 
-var Port string
-
-var AppId, BotToken, TestGuildId string
-
 var (
 	Services = "services"
 	Apps     = "apps"
-	Server   = &struct {
-		Fiber string
-	}{
-		Fiber: log.Server("fiber"),
-	}
-	Bot = &struct {
-		Discord string
-	}{
-		Discord: log.Bot("discord"),
-	}
 )
+
+var Port string
+
+var AppId, BotToken, TestGuildId string
 
 func usage() {
 	fmt.Printf("Usage: %s [OPTIONS]\n", cli)
@@ -68,31 +58,17 @@ func main() {
 
 	log.Starting(Apps)
 
-	log.Starting(Server.Fiber)
-
 	go func() {
 		if err := server.Run(Port); err != nil {
 			log.Fatal(err.Error())
 		}
 	}()
 
-	log.Started(Server.Fiber)
-
-	log.Info(fmt.Sprintf("%s listening on :%s", Server.Fiber, Port))
-
-	if proxy, ok := env.Server.Fiber.HasProxy(); ok {
-		log.Info(fmt.Sprintf("%s proxy listening on :%s", Server.Fiber, proxy))
-	}
-
-	log.Starting(Bot.Discord)
-
 	go func() {
 		if err := bot.Run(AppId, BotToken, TestGuildId); err != nil {
 			log.Fatal(err.Error())
 		}
 	}()
-
-	log.Started(Bot.Discord)
 
 	log.Started(Apps)
 
@@ -110,17 +86,9 @@ func main() {
 
 	log.Stopping(Apps)
 
-	log.Stopping(Server.Fiber)
-
 	errServer := server.Stop(ctx)
 
-	log.Stopped(Server.Fiber)
-
-	log.Stopping(Bot.Discord)
-
 	errBot := bot.Stop()
-
-	log.Stopped(Bot.Discord)
 
 	log.Stopped(Apps)
 

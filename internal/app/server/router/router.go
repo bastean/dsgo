@@ -7,14 +7,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Routing(server *fiber.App, files *embed.FS) {
-	server.Use(middleware.Recover)
+func Routing(app *fiber.App, files *embed.FS) {
+	app.Use(middleware.Recover)
 
-	server.Use("/public", middleware.FileSystem(files))
+	app.Use("/public", middleware.FileSystem(files))
 
-	server.Use(middleware.Headers)
+	app.Use(middleware.Headers)
 
-	server.Use(middleware.Limiter)
+	app.Use(middleware.Limiter)
 
-	Routes(server)
+	Routes(app)
 }

@@ -5,20 +5,17 @@ import (
 	"github.com/bastean/dsgo/internal/pkg/service/errors"
 	"github.com/bastean/dsgo/internal/pkg/service/logger/log"
 	"github.com/bastean/dsgo/internal/pkg/service/user"
-	"github.com/bastean/dsgo/pkg/context/domain/repository"
-	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence/mysql"
-	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence/sqlite"
+	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence/sql"
 )
 
 var (
-	err    error
-	MySQL  *mysql.MySQL
-	SQLite *sqlite.SQLite
+	err      error
+	Database *sql.Database
 )
 
 var (
 	Service = &struct {
-		MySQL, SQLite string
+		Database, MySQL, SQLite string
 	}{
 		MySQL:  log.Service("mysql"),
 		SQLite: log.Service("sqlite"),
@@ -31,7 +28,7 @@ var (
 )
 
 func OpenMySQL() error {
-	MySQL, err = mysql.Open(
+	Database, err = sql.OpenMySQL(
 		env.Database.MySQL.DSN,
 		env.Database.MySQL.Name,
 	)
@@ -44,7 +41,7 @@ func OpenMySQL() error {
 }
 
 func OpenSQLite() error {
-	SQLite, err = sqlite.Open(
+	Database, err = sql.OpenSQLite(
 		env.Database.SQLite.Name,
 	)
 
@@ -56,14 +53,7 @@ func OpenSQLite() error {
 }
 
 func StartModuleUser() error {
-	var table repository.User
-
-	switch {
-	case MySQL != nil:
-		table, err = mysql.UserTable(MySQL)
-	case SQLite != nil:
-		table, err = sqlite.UserTable(SQLite)
-	}
+	table, err := sql.UserTable(Database)
 
 	if err != nil {
 		return errors.BubbleUp(err, "StartModuleUser")
@@ -91,8 +81,11 @@ func Run() error {
 		}
 
 		log.ConnectionEstablishedWith(Service.SQLite)
+
+		Service.Database = Service.SQLite
 	} else {
 		log.ConnectionEstablishedWith(Service.MySQL)
+		Service.Database = Service.MySQL
 	}
 
 	log.Starting(Module.User)
@@ -108,37 +101,22 @@ func Run() error {
 	return nil
 }
 
-func CloseMySQL() error {
-	err = mysql.Close(MySQL)
+func CloseDatabase() error {
+	log.ClosingConnectionWith(Service.Database)
+
+	err = sql.Close(Database)
 
 	if err != nil {
-		return errors.BubbleUp(err, "CloseMySQL")
+		return errors.BubbleUp(err, "CloseDatabase")
 	}
 
-	return nil
-}
-
-func CloseSQLite() error {
-	err = sqlite.Close(SQLite)
-
-	if err != nil {
-		return errors.BubbleUp(err, "CloseSQLite")
-	}
+	log.ConnectionClosedWith(Service.Database)
 
 	return nil
 }
 
 func Stop() error {
-	switch {
-	case MySQL != nil:
-		log.ClosingConnectionWith(Service.MySQL)
-		err = mysql.Close(MySQL)
-	case SQLite != nil:
-		log.ClosingConnectionWith(Service.SQLite)
-		err = sqlite.Close(SQLite)
-	}
-
-	if err != nil {
+	if err := CloseDatabase(); err != nil {
 		return errors.BubbleUp(err, "Stop")
 	}
 

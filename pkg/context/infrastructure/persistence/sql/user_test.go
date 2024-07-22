@@ -1,4 +1,4 @@
-package mysql_test
+package sql_test
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/bastean/dsgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/dsgo/pkg/context/domain/errors"
 	"github.com/bastean/dsgo/pkg/context/domain/repository"
-	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence/mysql"
+	"github.com/bastean/dsgo/pkg/context/infrastructure/persistence/sql"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -18,13 +18,20 @@ type UserTestSuite struct {
 }
 
 func (suite *UserTestSuite) SetupTest() {
+	var database *sql.Database
+
 	dsn := os.Getenv("DATABASE_MYSQL_DSN")
 
 	name := os.Getenv("DATABASE_MYSQL_NAME")
 
-	database, _ := mysql.Open(dsn, name)
+	database, err := sql.OpenMySQL(dsn, name)
 
-	suite.sut, _ = mysql.UserTable(database)
+	if err != nil {
+		inMemory := "file::memory:?cache=shared"
+		database, _ = sql.OpenSQLite(inMemory)
+	}
+
+	suite.sut, _ = sql.UserTable(database)
 }
 
 func (suite *UserTestSuite) TestSave() {

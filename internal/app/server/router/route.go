@@ -6,8 +6,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Routes(server *fiber.App) {
-	public := server.Group("/")
+func Routes(app *fiber.App) {
+	public := app.Group("/")
 
 	public.Get("/", page.Home())
 	public.Put("/", user.Create())
@@ -15,5 +15,5 @@ func Routes(server *fiber.App) {
 	public.Patch("/", user.Update())
 	public.Delete("/", user.Delete())
 
-	server.Use(page.Default())
+	app.Use(page.Default())
 }
