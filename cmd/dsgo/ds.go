@@ -34,7 +34,7 @@ func usage() {
 }
 
 func main() {
-	log.Info("dsGO v0.0.1-alpha.0")
+	log.Info("dsGO")
 
 	flag.StringVar(&Port, "port", env.Server.Fiber.Port, "Fiber Server Port")
 
