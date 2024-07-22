@@ -2,17 +2,60 @@ package log
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/bastean/dsgo/pkg/context/infrastructure/record/log"
+	"github.com/common-nighthawk/go-figure"
+	"github.com/fatih/color"
+)
+
+var (
+	Blue    = color.New(color.FgBlue, color.Bold).Sprint
+	Cyan    = color.New(color.FgCyan, color.Bold).Sprint
+	Green   = color.New(color.FgGreen, color.Bold).Sprint
+	Magenta = color.New(color.FgMagenta, color.Bold).Sprint
+	Red     = color.New(color.FgRed, color.Bold).Sprint
 )
 
 var (
 	Log   = new(log.Log)
-	Debug = Log.Debug
-	Error = Log.Error
-	Fatal = Log.Fatal
-	Info  = Log.Info
+	Debug = func(message string) { Log.Debug(Cyan(message)) }
+	Error = func(message string) { Log.Error(Red(message)) }
+	Fatal = func(message string) { Log.Fatal(Red(message)) }
+	Info  = func(message string) { Log.Info(Blue(message)) }
 )
+
+var (
+	Ok = func(message string) { Log.Info(Green(message)) }
+)
+
+func Logo() {
+	figureDs := figure.NewFigure("ds", "speed", true).Slicify()
+	figureGo := figure.NewFigure("GO", "speed", true).Slicify()
+
+	width := 0
+	fixedWidth := 0
+
+	for _, line := range figureDs {
+		width = len(line)
+
+		if width > fixedWidth {
+			fixedWidth = width
+		}
+	}
+
+	for i, line := range figureDs {
+		width = len(line)
+
+		if width < fixedWidth {
+			line += strings.Repeat(" ", (fixedWidth - width))
+		}
+
+		fmt.Println(Magenta(line), Cyan(figureGo[i]))
+	}
+
+	fmt.Println()
+}
 
 func Service(service string) string {
 	return fmt.Sprintf("service:%s", service)
@@ -22,12 +65,12 @@ func Module(module string) string {
 	return fmt.Sprintf("module:%s", module)
 }
 
-func Server(server string) string {
-	return fmt.Sprintf("server:%s", server)
+func Server(app string) string {
+	return fmt.Sprintf("server:%s", app)
 }
 
-func Bot(bot string) string {
-	return fmt.Sprintf("bot:%s", bot)
+func Bot(app string) string {
+	return fmt.Sprintf("bot:%s", app)
 }
 
 func Starting(service string) {
@@ -35,7 +78,11 @@ func Starting(service string) {
 }
 
 func Started(service string) {
-	Info(fmt.Sprintf("%s started", service))
+	Ok(fmt.Sprintf("%s started", service))
+}
+
+func CannotBeStarted(service string) {
+	Error(fmt.Sprintf("%s cannot be started", service))
 }
 
 func Stopping(service string) {
@@ -43,7 +90,11 @@ func Stopping(service string) {
 }
 
 func Stopped(service string) {
-	Info(fmt.Sprintf("%s stopped", service))
+	Ok(fmt.Sprintf("%s stopped", service))
+}
+
+func CannotBeStopped(service string) {
+	Error(fmt.Sprintf("%s cannot be stopped", service))
 }
 
 func EstablishingConnectionWith(service string) {
@@ -51,11 +102,11 @@ func EstablishingConnectionWith(service string) {
 }
 
 func ConnectionEstablishedWith(service string) {
-	Info(fmt.Sprintf("connection established with %s", service))
+	Ok(fmt.Sprintf("connection established with %s", service))
 }
 
 func ConnectionFailedWith(service string) {
-	Info(fmt.Sprintf("connection failed with %s", service))
+	Error(fmt.Sprintf("connection failed with %s", service))
 }
 
 func ClosingConnectionWith(service string) {
@@ -63,5 +114,9 @@ func ClosingConnectionWith(service string) {
 }
 
 func ConnectionClosedWith(service string) {
-	Info(fmt.Sprintf("connection closed with %s", service))
+	Ok(fmt.Sprintf("connection closed with %s", service))
+}
+
+func DisconnectionFailedWith(service string) {
+	Error(fmt.Sprintf("disconnection failed with %s", service))
 }

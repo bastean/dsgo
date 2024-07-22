@@ -34,8 +34,6 @@ func usage() {
 }
 
 func main() {
-	log.Info("dsGO")
-
 	flag.StringVar(&Port, "port", env.Server.Fiber.Port, "Fiber Server Port")
 
 	flag.StringVar(&AppId, "app", env.Bot.Discord.AppId, "Discord App Id Token")
@@ -48,9 +46,11 @@ func main() {
 
 	flag.Parse()
 
+	log.Logo()
+
 	log.Starting(Services)
 
-	if err := service.Run(); err != nil {
+	if err := service.Up(); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -59,13 +59,13 @@ func main() {
 	log.Starting(Apps)
 
 	go func() {
-		if err := server.Run(Port); err != nil {
+		if err := server.Up(Port); err != nil {
 			log.Fatal(err.Error())
 		}
 	}()
 
 	go func() {
-		if err := bot.Run(AppId, BotToken, TestGuildId); err != nil {
+		if err := bot.Up(AppId, BotToken, TestGuildId); err != nil {
 			log.Fatal(err.Error())
 		}
 	}()
@@ -86,21 +86,25 @@ func main() {
 
 	log.Stopping(Apps)
 
-	errServer := server.Stop(ctx)
+	errServer := server.Down(ctx)
 
-	errBot := bot.Stop()
+	errBot := bot.Down()
+
+	if err := errors.Join(errServer, errBot); err != nil {
+		log.Error(err.Error())
+	}
 
 	log.Stopped(Apps)
 
 	log.Stopping(Services)
 
-	errService := service.Stop()
+	errService := service.Down()
+
+	if errService != nil {
+		log.Error(errService.Error())
+	}
 
 	log.Stopped(Services)
-
-	if err := errors.Join(errServer, errBot, errService); err != nil {
-		log.Error(err.Error())
-	}
 
 	<-ctx.Done()
 

@@ -66,7 +66,7 @@ func StartModuleUser() error {
 	return nil
 }
 
-func Run() error {
+func Up() error {
 	log.EstablishingConnectionWith(Service.MySQL)
 
 	if err = OpenMySQL(); err != nil {
@@ -77,7 +77,7 @@ func Run() error {
 		log.EstablishingConnectionWith(Service.SQLite)
 
 		if err = OpenSQLite(); err != nil {
-			return errors.BubbleUp(err, "Run")
+			return errors.BubbleUp(err, "Up")
 		}
 
 		log.ConnectionEstablishedWith(Service.SQLite)
@@ -93,7 +93,7 @@ func Run() error {
 	err = StartModuleUser()
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err, "Up")
 	}
 
 	log.Started(Module.User)
@@ -115,9 +115,10 @@ func CloseDatabase() error {
 	return nil
 }
 
-func Stop() error {
+func Down() error {
 	if err := CloseDatabase(); err != nil {
-		return errors.BubbleUp(err, "Stop")
+		log.DisconnectionFailedWith(Service.Database)
+		return errors.BubbleUp(err, "Down")
 	}
 
 	return nil

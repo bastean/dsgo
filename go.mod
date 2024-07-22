@@ -7,6 +7,7 @@ require (
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/bwmarrin/discordgo v0.28.1
 	github.com/cucumber/godog v0.14.1
+	github.com/fatih/color v1.17.0
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/playwright-community/playwright-go v0.4501.1
@@ -19,6 +20,7 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
+	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be // indirect
 	github.com/cucumber/gherkin/go/v26 v26.2.0 // indirect
 	github.com/cucumber/messages/go/v21 v21.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

@@ -26,7 +26,7 @@ var Files embed.FS
 
 var App *fiber.App
 
-func Run(port string) error {
+func Up(port string) error {
 	log.Starting(Server.Fiber)
 
 	App = fiber.New(fiber.Config{
@@ -37,7 +37,8 @@ func Run(port string) error {
 	router.Routing(App, &Files)
 
 	if err := App.Listen(":" + port); err != nil {
-		return errors.BubbleUp(err, "Run")
+		log.CannotBeStarted(Server.Fiber)
+		return errors.BubbleUp(err, "Up")
 	}
 
 	log.Started(Server.Fiber)
@@ -51,11 +52,12 @@ func Run(port string) error {
 	return nil
 }
 
-func Stop(ctx context.Context) error {
+func Down(ctx context.Context) error {
 	log.Stopping(Server.Fiber)
 
 	if err := App.ShutdownWithContext(ctx); err != nil {
-		return errors.BubbleUp(err, "Stop")
+		log.CannotBeStopped(Server.Fiber)
+		return errors.BubbleUp(err, "Down")
 	}
 
 	log.Stopped(Server.Fiber)

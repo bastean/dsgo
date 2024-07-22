@@ -21,25 +21,28 @@ var (
 	Session *discordgo.Session
 )
 
-func Run(app, token, guild string) error {
+func Up(app, token, guild string) error {
 	log.Starting(Bot.Discord)
 
 	Session, err = discordgo.New("Bot " + token)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		log.CannotBeStarted(Bot.Discord)
+		return errors.BubbleUp(err, "Up")
 	}
 
 	_, err = Session.ApplicationCommandBulkOverwrite(app, guild, command.Commands)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		log.CannotBeStarted(Bot.Discord)
+		return errors.BubbleUp(err, "Up")
 	}
 
 	handler.Events(Session)
 
 	if err := Session.Open(); err != nil {
-		return errors.BubbleUp(err, "Run")
+		log.ConnectionFailedWith(Bot.Discord)
+		return errors.BubbleUp(err, "Up")
 	}
 
 	log.Started(Bot.Discord)
@@ -47,11 +50,12 @@ func Run(app, token, guild string) error {
 	return nil
 }
 
-func Stop() error {
+func Down() error {
 	log.Stopping(Bot.Discord)
 
 	if err := Session.Close(); err != nil {
-		return errors.BubbleUp(err, "Stop")
+		log.DisconnectionFailedWith(Bot.Discord)
+		return errors.BubbleUp(err, "Down")
 	}
 
 	log.Stopped(Bot.Discord)
