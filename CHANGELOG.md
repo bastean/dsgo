@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.2](https://github.com/bastean/dsgo/compare/v0.1.1...v0.1.2) (2024-07-23)
+
+### Bug Fixes
+
+- add files required by the browser to embed ([039c6fa](https://github.com/bastean/dsgo/commit/039c6fa63afbe240daf62dce56d016a9f5993d77))
+
 ## [0.1.1](https://github.com/bastean/dsgo/compare/v0.1.0...v0.1.1) (2024-07-23)
 
 ### Bug Fixes
