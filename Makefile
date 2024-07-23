@@ -183,7 +183,7 @@ release-beta:
 	${release-it} --preRelease=beta
 
 release-ci:
-	${release-it} --ci $(OPTIONS)
+	${release-it} --ci --no-git.requireCleanWorkingDir $(OPTIONS)
 
 release-dry:
 	${release-it-dry}
