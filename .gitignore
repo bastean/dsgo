@@ -48,7 +48,6 @@ build
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *_templ.txt
-*_templ.go
 
 #* Misc
 ignore*
