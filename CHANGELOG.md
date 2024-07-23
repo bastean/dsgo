@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/bastean/dsgo/compare/v0.1.0...v0.1.1) (2024-07-23)
+
+### Bug Fixes
+
+- add templ go files to install the cli ([4e063c5](https://github.com/bastean/dsgo/commit/4e063c50ac97115b8e5b344431f122db7302aa8a))
+- **makefile:** add no clean directory required to release in ci ([e559dc4](https://github.com/bastean/dsgo/commit/e559dc468e8cfd9d32a419c8f34fa521bb7831a2))
+
 ## [0.1.0](https://github.com/bastean/dsgo/compare/v0.0.1-alpha.0...v0.1.0) (2024-07-23)
 
 ### Chores
