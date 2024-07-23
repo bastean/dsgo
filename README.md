@@ -8,12 +8,13 @@
 
 <div align="center">
 
-> Example discord bot applying a layered architecture.
+> Example of interoperability between a Web App and a Discord Bot using a layered architecture.
 
 </div>
 
 > [!IMPORTANT]
-> dsGO is still in the early stages of development.
+>
+> - `dsGO` is still in the early stages of development.
 
 <br />
 
@@ -47,195 +48,77 @@
 
 <img src="assets/readme/desktop-home.png" />
 
-<img src="assets/readme/desktop-dashboard.png" />
-
-<img width="49%" src="assets/readme/mobile-home.png" />
-
-<img width="49%" src="assets/readme/mobile-dashboard.png" />
-
-<img src="assets/readme/mail-confirm-account.png" />
-
 </div>
 
-## Usage (Demo)
+## CLI
+
+### Installation
+
+```bash
+go install github.com/bastean/dsgo/cmd/dsgo@latest
+```
+
+### Usage
+
+> [!NOTE]
+>
+> - We can follow this guide ["Building your first Discord app"](https://discord.com/developers/docs/quick-start/getting-started#step-1-creating-an-app) to create a new app in case we do not have one already created.
+> - SQLite will be used as the default database instead of MySQL.
+
+```bash
+dsgo -h
+```
+
+```text
+Usage: dsgo [OPTIONS]
+
+Example of interoperability between a Web App and a Discord Bot using a layered architecture.
+
+  -app string
+        Discord App Id Token (Required)
+  -guild string
+        Discord Test Guild Id (Optional)
+  -port string
+        Fiber Server Port (Optional)
+  -token string
+        Discord Bot Token (Required)
+```
+
+## Docker (Demo)
+
+### Usage
 
 > [!NOTE]
 >
 > - [System Requirements](#locally)
-> - In the Demo version, the link to confirm the account is sent through the Terminal.
->   - _"Hi \<username\>, please confirm your account through this link: \<link\>"_
-> - You can define your own **SMTP** configuration in the [.env.demo](deployments/.env.demo) file by simply modifying the **SERVER_SMTP\_\*** variables, then you will receive the links by mail.
+> - We must define our own **Discord** configuration in the file [.env.demo](deployments/.env.demo) by modifying the variables `DSGO_BOT_DISCORD_*`.
+>   - The required values are `DSGO_BOT_DISCORD_APP_ID` and `DSGO_BOT_DISCORD_APP_TOKEN`, the other values are optional.
+>   - We can follow this guide ["Building your first Discord app"](https://discord.com/developers/docs/quick-start/getting-started#step-1-creating-an-app) to create a new app in case we do not have one already created.
+> - MySQL will be used as the default database, SQLite will only be used in case there is a connection problem with MySQL.
 
 ```bash
 make demo
 ```
 
-## Features
+## Workflow
 
-### Project Layout
+### Functionality
 
-- Based on [Standard Go Project Layout](https://github.com/golang-standards/project-layout).
+It is a simple monolith where CRUD operations are performed from the Web App and the Discord Bot to the same database, this allows us to manage users from different applications (presentations).
 
-### Git
+### Folders
 
-- Hooks managed by [husky](https://github.com/typicode/husky):
-  - Pre-Push:
-    - Scanning Repository for leaks using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog) and [Trivy](https://github.com/aquasecurity/trivy)
-  - Pre-Commit: [lint-staged](https://github.com/lint-staged/lint-staged)
-    - Scanning files for leaks using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)
-    - Formatting
-  - Commit-Msg: [commitlint](https://github.com/conventional-changelog/commitlint)
-    - Check [Conventional Commits](https://www.conventionalcommits.org) rules
-- Commit message helper using [Commitizen](https://github.com/commitizen/cz-cli).
-  - Interactive prompt that allows you to write commits following the [Conventional Commits](https://www.conventionalcommits.org) rules:
-    ```bash
-    make commit
-    ```
+1. `pkg/context`
 
-### Linting/Formatting Tools
+   - It is the logical core that contains all the necessary functionalities that are independent of any presentation (application).
 
-- Go: **staticcheck** and **gofmt**.
-- templ: **templ fmt**.
-- Gherkin: **Cucumber extension**.
-- Others: **Prettier cli/extension**.
+2. `internal/pkg/service`
 
-### Scanners
+   - It is responsible for initializing all “context” functionalities so that they are ready for use, as well as for “mapping” certain values to centralize all imports of presentations (applications) in a single place.
 
-- [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog): Secrets.
-- [Trivy](https://github.com/aquasecurity/trivy): Secrets, Vulnerabilities and Misconfigurations.
-- [OSV-Scanner](https://github.com/google/osv-scanner): Vulnerabilities.
+3. `internal/app/(bot|server)`
 
-### Testing Packages
-
-- Random data generator: [Gofakeit](https://github.com/brianvoe/gofakeit).
-- Unit/Integration: [Testify](https://github.com/stretchr/testify).
-- Acceptance: [Testify](https://github.com/stretchr/testify), [Godog (Cucumber)](https://github.com/cucumber/godog) and [Playwright](https://github.com/playwright-community/playwright-go).
-
-### Releases
-
-- Automatically managed by [Release It!](https://github.com/release-it/release-it):
-  - Before/After Hooks for:
-    - Linting
-    - Testing
-  - Bump version based on [Conventional Commits](https://www.conventionalcommits.org) and [SemVer](https://semver.org/):
-    - CHANGELOG generator
-    - Commits and Tags generator
-    - GitHub Releases
-
-### GitHub
-
-- Actions for:
-  - Setup Languages and Dependencies
-- Workflows running:
-  - Automatically (Triggered by **Push** or **Pull requests**):
-    - Secrets Scanning ([TruffleHog Action](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#octocat-trufflehog-github-action))
-    - Linting
-    - Testing
-  - Manually (Using the **Actions tab** on GitHub):
-    - Upgrade Dependencies
-    - Automate Release
-- Issue Templates **(Defaults)**.
-
-### Devcontainer
-
-- Multiple Features already pre-configured:
-  - Go
-  - Node
-  - Docker in Docker
-- Extensions and their respective settings to work with:
-  - Go
-  - templ
-  - Cucumber
-    - Gherkin
-  - Prettier
-  - Better Comments
-  - Todo Tree
-  - cSpell
-
-### Docker
-
-- Dockerfile
-  - **Multi-stage builds**:
-    - Development
-    - Testing
-    - Build
-    - Production
-- Compose
-  - Switched by ENVs.
-
-### Message Broker
-
-- Routing Key based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition).
-
-### Security
-
-- Form validation at the client using [Fomantic - Form Validation](https://fomantic-ui.com/behaviors/form.html).
-  - On the server, the validations are performed using the **Value Objects** defined in the **Context**.
-- Data **authentication** via **JWT** managed by **Session Cookies**.
-- Account confirmation via **Mail** or **Terminal**.
-- Password hashing using [Bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt).
-- Requests **Rate Limiting**.
-- Server log files.
-
-### Scripts
-
-- [syncenv](scripts/syncenv/syncenv.go)
-  - Synchronize all **.env\*** files in the directory using an **.env** model.
-- [copydeps](scripts/copydeps/copydeps.go)
-  - Copies the files required by the browser dependencies from the **node_modules** folder and places them inside the **static** folder on the server.
-- [upgrade](scripts/upgrade/upgrade.go)
-  - Perform the following steps to upgrade the project:
-    1. Upgrade Go and Node dependencies.
-    2. Linting and Testing.
-    3. Commit changes.
-- [run](deployments/run.sh)
-  - Display the logs and redirect them to a file whose name depends on the time at which the service was run.
-  - Used in Production Image.
-
-## Basic Workflow (Domain > (Infrastructure | Application) > Presentation)
-
-### Context (Domain, Infrastructure & Application) > (Modules)
-
-- Domain
-  - Value Objects
-    - Mother Creators
-    - Unit Tests
-  - Messages (Event/Command)
-    - Mother Creators
-  - Aggregates
-    - Aggregate Root
-    - Mother Creators
-  - Models (Ports)
-    - Repository
-    - Broker
-- Infrastructure
-  - Persistence
-    - Repository Mocks
-    - Adapters
-    - Integration Tests
-  - Communication
-    - Broker Mocks
-    - Adapters
-    - Integration Tests
-- Application
-  - Commands
-    - Mother Creators
-  - Querys/Responses
-    - Mother Creators
-  - Handlers/Consumers
-    - Inputs & Outputs
-      - Uses Cases
-    - Unit Tests
-
-### App (Presentation) > (Server)
-
-- Presentation
-  - Services (Modules)
-  - Templates
-  - Handlers
-  - Routes
-  - Features (Gherkin)
-    - Acceptance Tests
+   - These applications will be used as “presentations” in order to serve the functionalities to an end user.
 
 ## First Steps
 
@@ -304,45 +187,23 @@ git clone git@github.com:bastean/dsgo.git && cd dsgo
    make init-zero
    ```
 
-### GitHub Repository
-
-#### Settings
-
-##### Actions
-
-- General
-
-  - Workflow permissions
-
-    - [x] Read and write permissions
-
-##### Secrets and variables
-
-- Actions
-
-  - New repository secret
-
-    - BOT_GPG_PRIVATE_KEY
-
-      ```bash
-      gpg --armor --export-secret-key [Pub_Key_ID (*-BOT)]
-      ```
-
-    - BOT_GPG_PASSPHRASE
-
 ### Run
 
 #### ENVs
 
 > [!IMPORTANT]
-> Before running it, you must set the following environment variables and rename the file to **.env.(dev|test|prod)**.
+> Before running it, we must initialize the following environment variable files:
 >
 > - [.env.example](deployments/.env.example)
-
-> [!TIP]
-> You can check the demo file to see which values you can use.
+>   - We will have to create a `.env.(dev|test|prod)` for each runtime environment.
+>   - In the [.env.example.demo](deployments/.env.example.demo) file, we can see the values that can be used.
 >
-> - [.env.example.demo](deployments/.env.example.demo)
+> In case we only want to run the **Integration** or **Acceptance** tests, in addition to having the `.env.test` file, we must have the following files created:
+>
+> - [.env.example.test.integration](deployments/.env.example.test.integration)
+>   - Rename the file to `.env.test.integration`.
+> - [.env.example.test.acceptance](deployments/.env.example.test.acceptance)
+>   - Rename the file to `.env.test.acceptance`.
 
 #### Development
 
@@ -387,10 +248,13 @@ make compose-prod
 #### Base
 
 - [Go](https://go.dev)
+- [Fiber](https://docs.gofiber.io)
+- [DiscordGo](https://github.com/bwmarrin/discordgo)
 - [templ](https://templ.guide)
   - [Fomantic-UI](https://fomantic-ui.com)
-- [RabbitMQ](https://www.rabbitmq.com/tutorials/tutorial-one-go)
-- [MongoDB](https://www.mongodb.com/docs/drivers/go)
+- [GORM](https://gorm.io)
+  - [MySQL](https://www.mysql.com)
+  - [SQLite](https://www.sqlite.org)
 
 #### Please see
 

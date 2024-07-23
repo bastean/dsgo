@@ -29,18 +29,19 @@ var Port string
 var AppId, BotToken, TestGuildId string
 
 func usage() {
-	fmt.Printf("Usage: %s [OPTIONS]\n", cli)
+	fmt.Printf("Usage: %s [OPTIONS]\n\n", cli)
+	fmt.Print("Example of interoperability between a Web App and a Discord Bot using a layered architecture.\n\n")
 	flag.PrintDefaults()
 }
 
 func main() {
-	flag.StringVar(&Port, "port", env.Server.Fiber.Port, "Fiber Server Port")
+	flag.StringVar(&Port, "port", env.Server.Fiber.Port, "Fiber Server Port (Optional)")
 
-	flag.StringVar(&AppId, "app", env.Bot.Discord.AppId, "Discord App Id Token")
+	flag.StringVar(&AppId, "app", env.Bot.Discord.AppId, "Discord App Id Token (Required)")
 
-	flag.StringVar(&BotToken, "token", env.Bot.Discord.BotToken, "Discord Bot Token")
+	flag.StringVar(&BotToken, "token", env.Bot.Discord.BotToken, "Discord Bot Token (Required)")
 
-	flag.StringVar(&TestGuildId, "guild", env.Bot.Discord.TestGuildId, "Discord Test Guild Id")
+	flag.StringVar(&TestGuildId, "guild", env.Bot.Discord.TestGuildId, "Discord Test Guild Id (Optional)")
 
 	flag.Usage = usage
 
