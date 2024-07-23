@@ -40,7 +40,6 @@ lerna-debug.log*
 !*.db.example*
 
 #* Production
-dist
 dist-ssr
 build
 
