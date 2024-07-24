@@ -25,8 +25,14 @@ func UpgradeNode() {
 	}
 }
 
+func UpgradeTools() {
+	if err := exec.Command("make", "install-tools").Run(); err != nil {
+		Panic(err, "UpgradeTools")
+	}
+}
+
 func RunLint() {
-	if err := exec.Command("make", "lint-check").Run(); err != nil {
+	if err := exec.Command("make", "lint").Run(); err != nil {
 		Panic(err, "RunLint")
 	}
 }
@@ -42,22 +48,23 @@ func Commit() {
 		Panic(err, "Commit")
 	}
 
-	if err := exec.Command("git", "commit", "-m", "chore(deps): upgrade dependencies").Run(); err != nil {
+	if err := exec.Command("git", "commit", "-m", "chore(deps): upgrade").Run(); err != nil {
 		Panic(err, "Commit")
 	}
 }
 
 func main() {
-	log.Println("Upgrading dependencies")
-
-	log.Println("Running Go Tidy")
+	log.Println("Starting upgrades...")
 	RunLint()
 
-	log.Println("Upgrading Go dependencies")
+	log.Println("Upgrading Go")
 	UpgradeGo()
 
-	log.Println("Upgrading Node dependencies")
+	log.Println("Upgrading Node")
 	UpgradeNode()
+
+	log.Println("Upgrading Tools")
+	UpgradeTools()
 
 	log.Println("Running Lint")
 	RunLint()
