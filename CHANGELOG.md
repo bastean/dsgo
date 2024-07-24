@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.3](https://github.com/bastean/dsgo/compare/v0.1.2...v0.1.3) (2024-07-24)
+
+### Chores
+
+- **deps:** upgrade ([c99e8f6](https://github.com/bastean/dsgo/commit/c99e8f63102525cc495ea88f88d4d211fa9cd6a7))
+
+### Bug Fixes
+
+- **cmd:** add sqlite database file path flag ([8519b93](https://github.com/bastean/dsgo/commit/8519b93832a9e81613791502d542990bdfe9f3bb))
+
+### Refactors
+
+- **scripts:** change upgrade messages ([5c03341](https://github.com/bastean/dsgo/commit/5c0334103845c0631c512bb06b39994511b856a1))
+
 ## [0.1.2](https://github.com/bastean/dsgo/compare/v0.1.1...v0.1.2) (2024-07-23)
 
 ### Bug Fixes
