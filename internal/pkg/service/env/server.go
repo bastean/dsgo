@@ -4,25 +4,17 @@ import (
 	"os"
 )
 
-type Fiber struct {
-	URL, Port string
-}
+var (
+	ServerFiberURL  = os.Getenv("DSGO_SERVER_FIBER_URL")
+	ServerFiberPort = os.Getenv("DSGO_SERVER_FIBER_PORT")
+)
 
-func (fiber *Fiber) HasProxy() (string, bool) {
+func HasServerFiberProxy() (string, bool) {
 	proxy := os.Getenv("DSGO_DEV_AIR_PROXY_PORT")
 
-	if proxy != "" && proxy != fiber.Port {
+	if proxy != "" && proxy != ServerFiberPort {
 		return proxy, true
 	}
 
 	return "", false
-}
-
-var Server = &struct {
-	*Fiber
-}{
-	Fiber: &Fiber{
-		URL:  os.Getenv("DSGO_SERVER_FIBER_URL"),
-		Port: os.Getenv("DSGO_SERVER_FIBER_PORT"),
-	},
 }

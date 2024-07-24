@@ -26,7 +26,7 @@ var Files embed.FS
 
 var App *fiber.App
 
-func Up(port string) error {
+func Up() error {
 	log.Starting(Server.Fiber)
 
 	App = fiber.New(fiber.Config{
@@ -36,16 +36,16 @@ func Up(port string) error {
 
 	router.Routing(App, &Files)
 
-	if err := App.Listen(":" + port); err != nil {
+	if err := App.Listen(":" + env.ServerFiberPort); err != nil {
 		log.CannotBeStarted(Server.Fiber)
 		return errors.BubbleUp(err, "Up")
 	}
 
 	log.Started(Server.Fiber)
 
-	log.Info(fmt.Sprintf("%s listening on :%s", Server.Fiber, port))
+	log.Info(fmt.Sprintf("%s listening on :%s", Server.Fiber, env.ServerFiberPort))
 
-	if proxy, ok := env.Server.Fiber.HasProxy(); ok {
+	if proxy, ok := env.HasServerFiberProxy(); ok {
 		log.Info(fmt.Sprintf("%s proxy listening on :%s", Server.Fiber, proxy))
 	}
 

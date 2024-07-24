@@ -4,23 +4,11 @@ import (
 	"os"
 )
 
-type MySQL struct {
-	DSN, Name string
-}
+var (
+	DatabaseMySQLDSN  = os.Getenv("DATABASE_MYSQL_DSN")
+	DatabaseMySQLName = os.Getenv("DATABASE_MYSQL_NAME")
+)
 
-type SQLite struct {
-	Name string
-}
-
-var Database = &struct {
-	*MySQL
-	*SQLite
-}{
-	MySQL: &MySQL{
-		DSN:  os.Getenv("DATABASE_MYSQL_DSN"),
-		Name: os.Getenv("DATABASE_MYSQL_NAME"),
-	},
-	SQLite: &SQLite{
-		Name: os.Getenv("DATABASE_SQLITE_NAME"),
-	},
-}
+var (
+	DatabaseSQLiteName = os.Getenv("DATABASE_SQLITE_NAME")
+)

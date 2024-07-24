@@ -37,6 +37,10 @@ func OpenMySQL(dsn, name string) (*Database, error) {
 }
 
 func OpenSQLite(filename string) (*Database, error) {
+	if filename == "" {
+		filename = "file::memory:?cache=shared"
+	}
+
 	session, err := gorm.Open(sqlite.Open(filename), Config)
 
 	if err != nil {

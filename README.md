@@ -75,13 +75,15 @@ Usage: dsgo [OPTIONS]
 Example of interoperability between a Web App and a Discord Bot using a layered architecture.
 
   -app string
-        Discord App Id Token (Required)
+        Discord App Id Token (required)
+  -database string
+        SQLite database file path (default "In-Memory")
   -guild string
-        Discord Test Guild Id (Optional)
+        Discord Test Guild Id (optional)
   -port string
-        Fiber Server Port (Optional)
+        Fiber Server Port (optional)
   -token string
-        Discord Bot Token (Required)
+        Discord Bot Token (required)
 ```
 
 ## Docker (Demo)

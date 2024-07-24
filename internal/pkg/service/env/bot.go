@@ -4,17 +4,9 @@ import (
 	"os"
 )
 
-type Discord struct {
-	AppId, PublicKey, BotToken, TestGuildId string
-}
-
-var Bot = &struct {
-	*Discord
-}{
-	Discord: &Discord{
-		AppId:       os.Getenv("DSGO_BOT_DISCORD_APP_ID"),
-		PublicKey:   os.Getenv("DSGO_BOT_DISCORD_APP_PUBLIC_KEY"),
-		BotToken:    os.Getenv("DSGO_BOT_DISCORD_APP_TOKEN"),
-		TestGuildId: os.Getenv("DSGO_BOT_DISCORD_TEST_GUILD_ID"),
-	},
-}
+var (
+	BotDiscordAppId       = os.Getenv("DSGO_BOT_DISCORD_APP_ID")
+	BotDiscordPublicKey   = os.Getenv("DSGO_BOT_DISCORD_APP_PUBLIC_KEY")
+	BotDiscordToken       = os.Getenv("DSGO_BOT_DISCORD_APP_TOKEN")
+	BotDiscordTestGuildId = os.Getenv("DSGO_BOT_DISCORD_TEST_GUILD_ID")
+)

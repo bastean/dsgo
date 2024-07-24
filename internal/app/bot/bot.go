@@ -3,6 +3,7 @@ package bot
 import (
 	"github.com/bastean/dsgo/internal/app/bot/command"
 	"github.com/bastean/dsgo/internal/app/bot/handler"
+	"github.com/bastean/dsgo/internal/pkg/service/env"
 	"github.com/bastean/dsgo/internal/pkg/service/errors"
 	"github.com/bastean/dsgo/internal/pkg/service/logger/log"
 	"github.com/bwmarrin/discordgo"
@@ -21,17 +22,17 @@ var (
 	Session *discordgo.Session
 )
 
-func Up(app, token, guild string) error {
+func Up() error {
 	log.Starting(Bot.Discord)
 
-	Session, err = discordgo.New("Bot " + token)
+	Session, err = discordgo.New("Bot " + env.BotDiscordToken)
 
 	if err != nil {
 		log.CannotBeStarted(Bot.Discord)
 		return errors.BubbleUp(err, "Up")
 	}
 
-	_, err = Session.ApplicationCommandBulkOverwrite(app, guild, command.Commands)
+	_, err = Session.ApplicationCommandBulkOverwrite(env.BotDiscordAppId, env.BotDiscordTestGuildId, command.Commands)
 
 	if err != nil {
 		log.CannotBeStarted(Bot.Discord)
